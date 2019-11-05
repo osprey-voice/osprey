@@ -7,6 +7,9 @@ license = "MIT"
 
 [tool.poetry.dependencies]
 python = "^3.7"
+google-cloud-speech = "^1.2"
+pyaudio = "^0.2.11"
+appdirs = "^1.4"
 
 [tool.poetry.dev-dependencies]
 
