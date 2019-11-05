@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "claw"
+version = "0.1.0"
+description = ""
+authors = ["Caleb Bassi <calebjbassi@gmail.com>"]
+license = "MIT"
+
+[tool.poetry.dependencies]
+python = "^3.7"
+
+[tool.poetry.dev-dependencies]
+
+[tool.poetry.scripts]
+claw = 'claw:main'
+
+[build-system]
+requires = ["poetry>=0.12"]
+build-backend = "poetry.masonry.api"
