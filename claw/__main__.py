@@ -13,6 +13,7 @@ from .applet import Applet
 CREDENTIALS_FILE_NAME = 'credentials.json'
 APPNAME = 'claw'
 SAMPLE_RATE = 16000
+CHUNK_SIZE = SAMPLE_RATE // 10  # 100ms
 
 
 def main():
@@ -24,7 +25,7 @@ def main():
         sys.exit("TODO")
     credentials = json.loads(credentials_file_path.read_text())
 
-    microphone = Microphone(SAMPLE_RATE)
+    microphone = Microphone(SAMPLE_RATE, CHUNK_SIZE)
 
     client = Client(credentials, SAMPLE_RATE)
 
