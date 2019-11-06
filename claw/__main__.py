@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 
-import json
 from pathlib import Path
 import sys
 
 import appdirs
+from google.oauth2 import service_account
 
 from .microphone import Microphone
 from .google_cloud_speech import Client
@@ -23,7 +23,7 @@ def main():
     credentials_file_path = config_dir.joinpath(CREDENTIALS_FILE_NAME)
     if not credentials_file_path.exists():
         sys.exit("TODO")
-    credentials = json.loads(credentials_file_path.read_text())
+    credentials = service_account.Credentials.from_service_account_file(credentials_file_path)
 
     microphone = Microphone(SAMPLE_RATE, CHUNK_SIZE)
 
