@@ -2,7 +2,7 @@
 
 ## Requirements
 
-- Python3
+- Python 3.4+
 - PortAudio
 - A GCP account with a project setup and enabled with the Speech-to-Text API
 	- follow step 1 [here](https://cloud.google.com/speech-to-text/docs/quickstart-client-libraries) for an easy setup process
