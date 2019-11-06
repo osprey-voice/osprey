@@ -2,6 +2,7 @@
 
 from pathlib import Path
 import sys
+import re
 
 import appdirs
 from google.oauth2 import service_account
@@ -14,6 +15,27 @@ CREDENTIALS_FILE_NAME = 'credentials.json'
 APPNAME = 'claw'
 SAMPLE_RATE = 16000
 CHUNK_SIZE = SAMPLE_RATE // 10  # 100ms
+
+
+def print_reponses(responses):
+    num_chars_printed = 0
+    for response in responses:
+        if not response.results:
+            continue
+        result = response.results[0]
+        if not result.alternatives:
+            continue
+        transcript = result.alternatives[0].transcript
+        overwrite_chars = ' ' * (num_chars_printed - len(transcript))
+        if not result.is_final:
+            sys.stdout.write(transcript + overwrite_chars + '\r')
+            sys.stdout.flush()
+            num_chars_printed = len(transcript)
+        else:
+            print(transcript + overwrite_chars)
+            if re.search(r'\b(exit|quit)\b', transcript, re.I):
+                break
+            num_chars_printed = 0
 
 
 def main():
@@ -33,7 +55,7 @@ def main():
 
     with microphone as stream:
         responses = client.stream_responses(stream)
-        print(responses)
+        print_reponses(responses)
 
 
 if __name__ == '__main__':
