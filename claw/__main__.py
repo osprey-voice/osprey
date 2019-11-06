@@ -31,6 +31,10 @@ def main():
 
     Applet()
 
+    with microphone as stream:
+        responses = client.stream_responses(stream)
+        print(responses)
+
 
 if __name__ == '__main__':
     main()
