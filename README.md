@@ -8,6 +8,7 @@
 	- follow step 1 [here](https://cloud.google.com/speech-to-text/docs/quickstart-client-libraries) for an easy setup process
 	- then copy the credentials to `~/.config/claw/credentials.json`
 - A (decent) microphone
+- A stable internet connection
 
 ## Installation
 
