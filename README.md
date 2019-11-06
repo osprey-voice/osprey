@@ -12,11 +12,11 @@
 
 ## Installation
 
-```bash
-pip install --user git+https://github.com/cjbassi/claw
-```
+Install using [pipx](https://github.com/pipxproject/pipx) with:
 
-Note that `~/.local/bin` needs to be added to your `$PATH` for user installs.
+```bash
+pipx install --spec git+https://github.com/cjbassi/claw claw
+```
 
 ## Usage
 
