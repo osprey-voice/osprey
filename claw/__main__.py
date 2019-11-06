@@ -6,6 +6,7 @@ import re
 
 import appdirs
 from google.oauth2 import service_account
+import notify2
 
 from .microphone import Microphone
 from .google_cloud_speech import Client
@@ -13,32 +14,39 @@ from .applet import Applet
 
 CREDENTIALS_FILE_NAME = 'credentials.json'
 APPNAME = 'claw'
+APPNAME_CAPITALIZED = APPNAME.capitalize()
 SAMPLE_RATE = 16000
 CHUNK_SIZE = SAMPLE_RATE // 10  # 100ms
 
 
 def print_reponses(responses):
-    num_chars_printed = 0
+    notification = None
+
     for response in responses:
         if not response.results:
             continue
         result = response.results[0]
         if not result.alternatives:
             continue
-        transcript = result.alternatives[0].transcript
-        overwrite_chars = ' ' * (num_chars_printed - len(transcript))
+        transcript = result.alternatives[0].transcript.strip()
+
         if not result.is_final:
-            sys.stdout.write(transcript + overwrite_chars + '\r')
-            sys.stdout.flush()
-            num_chars_printed = len(transcript)
+            if notification:
+                notification.update(APPNAME_CAPITALIZED, transcript)
+            else:
+                notification = notify2.Notification(APPNAME_CAPITALIZED, transcript)
+            notification.show()
         else:
-            print(transcript + overwrite_chars)
+            notification.update(APPNAME_CAPITALIZED, transcript)
+            notification.show()
+            notification = None
             if re.search(r'\b(exit|quit)\b', transcript, re.I):
                 break
-            num_chars_printed = 0
 
 
 def main():
+    notify2.init(APPNAME)
+
     app_dirs = appdirs.AppDirs(APPNAME)
     config_dir = Path(app_dirs.user_config_dir)
 
