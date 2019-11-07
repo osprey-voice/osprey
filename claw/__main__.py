@@ -13,8 +13,8 @@ from .google_cloud_speech import Client
 from .applet import Applet
 
 CREDENTIALS_FILE_NAME = 'credentials.json'
-APPNAME = 'claw'
-APPNAME_CAPITALIZED = APPNAME.capitalize()
+APP_NAME = 'claw'
+APP_NAME_CAPITALIZED = APP_NAME.capitalize()
 SAMPLE_RATE = 16000
 CHUNK_SIZE = SAMPLE_RATE // 10  # 100ms
 
@@ -32,12 +32,12 @@ def print_reponses(responses):
 
         if not result.is_final:
             if notification:
-                notification.update(APPNAME_CAPITALIZED, transcript)
+                notification.update(APP_NAME_CAPITALIZED, transcript)
             else:
-                notification = notify2.Notification(APPNAME_CAPITALIZED, transcript)
+                notification = notify2.Notification(APP_NAME_CAPITALIZED, transcript)
             notification.show()
         else:
-            notification.update(APPNAME_CAPITALIZED, transcript)
+            notification.update(APP_NAME_CAPITALIZED, transcript)
             notification.show()
             notification = None
             if re.search(r'\b(exit|quit)\b', transcript, re.I):
@@ -45,9 +45,9 @@ def print_reponses(responses):
 
 
 def main():
-    notify2.init(APPNAME)
+    notify2.init(APP_NAME)
 
-    app_dirs = appdirs.AppDirs(APPNAME)
+    app_dirs = appdirs.AppDirs(APP_NAME)
     config_dir = Path(app_dirs.user_config_dir)
 
     credentials_file_path = config_dir.joinpath(CREDENTIALS_FILE_NAME)
