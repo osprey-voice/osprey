@@ -12,6 +12,7 @@ pyaudio = "^0.2.11"
 appdirs = "^1.4"
 notify2 = "^0.3.1"
 dbus-python = "^1.2"
+pygobject = "^3.34"
 
 [tool.poetry.dev-dependencies]
 

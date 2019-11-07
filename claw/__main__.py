@@ -3,14 +3,16 @@
 from pathlib import Path
 import sys
 import re
+import threading
 
 import appdirs
 from google.oauth2 import service_account
 import notify2
+from gi.repository import Gtk as gtk, AppIndicator3 as appindicator
 
 from .microphone import Microphone
 from .google_cloud_speech import Client
-from .applet import Applet
+from .indicator import Indicator
 
 CREDENTIALS_FILE_NAME = 'credentials.json'
 APP_NAME = 'claw'
@@ -19,7 +21,7 @@ SAMPLE_RATE = 16000
 CHUNK_SIZE = SAMPLE_RATE // 10  # 100ms
 
 
-def print_reponses(responses):
+def display_reponses(responses):
     notification = None
 
     for response in responses:
@@ -41,7 +43,7 @@ def print_reponses(responses):
             notification.show()
             notification = None
             if re.search(r'\b(exit|quit)\b', transcript, re.I):
-                break
+                gtk.main_quit()
 
 
 def main():
@@ -56,14 +58,19 @@ def main():
     credentials = service_account.Credentials.from_service_account_file(credentials_file_path)
 
     microphone = Microphone(SAMPLE_RATE, CHUNK_SIZE)
-
     client = Client(credentials, SAMPLE_RATE)
+    Indicator(APP_NAME)
 
-    Applet()
+    def listen_to_microphone():
+        with microphone as stream:
+            responses = client.stream_responses(stream)
+            display_reponses(responses)
 
-    with microphone as stream:
-        responses = client.stream_responses(stream)
-        print_reponses(responses)
+    thread = threading.Thread(target=listen_to_microphone)
+    thread.daemon = True
+    thread.start()
+
+    gtk.main()
 
 
 if __name__ == '__main__':
