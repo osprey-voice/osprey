@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 
+from . import gi_require_version as _
+
 from pathlib import Path
 import sys
 import re

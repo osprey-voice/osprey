@@ -1,4 +1,3 @@
-from . import gi_require_version as _
 from gi.repository import Gtk as gtk, AppIndicator3 as appindicator
 
 
@@ -15,27 +14,70 @@ class Indicator():
     def _create_menu(self):
         menu = gtk.Menu()
 
-        microphone = gtk.MenuItem('Microphone')
-        menu.append(microphone)
+        item = gtk.MenuItem('Microphone')
 
-        speech_recognition = gtk.MenuItem('Speech Recognition')
-        menu.append(speech_recognition)
+        def create_microphone_menu():
+            sub_menu = gtk.Menu()
 
-        menu_separator = gtk.SeparatorMenuItem()
-        menu.append(menu_separator)
+            sub_item1 = gtk.RadioMenuItem('None')
+            sub_menu.append(sub_item1)
 
-        open_config_directory = gtk.MenuItem('Open Config Directory')
-        menu.append(open_config_directory)
+            sub_item2 = gtk.RadioMenuItem('System Default', group=sub_item1)
+            sub_item2.set_active(True)
+            sub_menu.append(sub_item2)
 
-        open_log_file = gtk.MenuItem('Open Log File')
-        menu.append(open_log_file)
+            separator = gtk.SeparatorMenuItem()
+            sub_menu.append(separator)
 
-        menu_separator = gtk.SeparatorMenuItem()
-        menu.append(menu_separator)
+            return sub_menu
 
-        quit = gtk.MenuItem('Quit')
-        menu.append(quit)
-        quit.connect('activate', self._quit)
+        item.set_submenu(create_microphone_menu())
+        menu.append(item)
+
+        item = gtk.MenuItem('Speech Recognition')
+
+        def create_speech_recognition_menu():
+            sub_menu = gtk.Menu()
+
+            sub_item = gtk.CheckMenuItem('Enable')
+            sub_menu.append(sub_item)
+
+            separator = gtk.SeparatorMenuItem()
+            sub_menu.append(separator)
+
+            sub_item = gtk.MenuItem('Language:')
+
+            def create_language_menu():
+                sub_menu = gtk.Menu()
+
+                sub_item = gtk.MenuItem('English')
+                sub_menu.append(sub_item)
+
+                return sub_menu
+
+            sub_item.set_submenu(create_language_menu())
+            sub_menu.append(sub_item)
+
+            return sub_menu
+
+        item.set_submenu(create_speech_recognition_menu())
+        menu.append(item)
+
+        separator = gtk.SeparatorMenuItem()
+        menu.append(separator)
+
+        item = gtk.MenuItem('Open Config Directory')
+        menu.append(item)
+
+        item = gtk.MenuItem('Open Log File')
+        menu.append(item)
+
+        separator = gtk.SeparatorMenuItem()
+        menu.append(separator)
+
+        item = gtk.MenuItem('Quit')
+        item.connect('activate', self._quit)
+        menu.append(item)
 
         menu.show_all()
         return menu
