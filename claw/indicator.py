@@ -1,13 +1,19 @@
 from gi.repository import Gtk as gtk, AppIndicator3 as appindicator
 
+from .open import open
+
 
 class Indicator():
-    def __init__(self, app_name):
+    def __init__(self, app_name, config_dir, log_file):
+        self._config_dir = config_dir
+        self._log_file = log_file
+
         icon_path = gtk.STOCK_INFO
         self._indicator = appindicator.Indicator.new(
             app_name,
             icon_path,
             appindicator.IndicatorCategory.OTHER)
+
         self._indicator.set_status(appindicator.IndicatorStatus.ACTIVE)
         self._indicator.set_menu(self._create_menu())
 
@@ -67,9 +73,11 @@ class Indicator():
         menu.append(separator)
 
         item = gtk.MenuItem('Open Config Directory')
+        item.connect('activate', self._open_config_dir)
         menu.append(item)
 
         item = gtk.MenuItem('Open Log File')
+        item.connect('activate', self._open_log_file)
         menu.append(item)
 
         separator = gtk.SeparatorMenuItem()
@@ -81,6 +89,12 @@ class Indicator():
 
         menu.show_all()
         return menu
+
+    def _open_config_dir(self, source):
+        open(self._config_dir)
+
+    def _open_log_file(self, source):
+        open(self._log_file)
 
     def _quit(self, source):
         gtk.main_quit()

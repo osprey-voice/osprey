@@ -53,6 +53,8 @@ def main():
 
     app_dirs = appdirs.AppDirs(APP_NAME)
     config_dir = Path(app_dirs.user_config_dir)
+    log_dir = Path(app_dirs.user_log_dir)
+    log_file = log_dir.joinpath("logs.txt")
 
     credentials_file_path = config_dir.joinpath(CREDENTIALS_FILE_NAME)
     if not credentials_file_path.exists():
@@ -61,7 +63,7 @@ def main():
 
     microphone = Microphone(SAMPLE_RATE, CHUNK_SIZE)
     client = Client(credentials, SAMPLE_RATE)
-    Indicator(APP_NAME)
+    Indicator(APP_NAME, config_dir, log_file)
 
     def listen_to_microphone():
         with microphone as stream:
