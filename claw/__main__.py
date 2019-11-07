@@ -17,6 +17,7 @@ from .google_cloud_speech import Client
 from .indicator import Indicator
 
 CREDENTIALS_FILE_NAME = 'credentials.json'
+LOG_FILE_NAME = 'logs.txt'
 APP_NAME = 'claw'
 APP_NAME_CAPITALIZED = APP_NAME.capitalize()
 SAMPLE_RATE = 16000
@@ -58,7 +59,7 @@ def main():
     app_dirs = appdirs.AppDirs(APP_NAME)
     config_dir = Path(app_dirs.user_config_dir)
     log_dir = Path(app_dirs.user_log_dir)
-    log_file = log_dir.joinpath("logs.txt")
+    log_file = log_dir.joinpath(LOG_FILE_NAME)
 
     credentials_file_path = config_dir.joinpath(CREDENTIALS_FILE_NAME)
     if not credentials_file_path.exists():
