@@ -23,15 +23,20 @@ SAMPLE_RATE = 16000
 CHUNK_SIZE = SAMPLE_RATE // 10  # 100ms
 
 
-def display_reponses(responses):
-    notification = None
-
+def filter_responses(responses):
     for response in responses:
         if not response.results:
             continue
         result = response.results[0]
         if not result.alternatives:
             continue
+        yield result
+
+
+def display_results(results):
+    notification = None
+
+    for result in results:
         transcript = result.alternatives[0].transcript.strip()
 
         if not result.is_final:
@@ -44,8 +49,7 @@ def display_reponses(responses):
             notification.update(APP_NAME_CAPITALIZED, transcript)
             notification.show()
             notification = None
-            if re.search(r'\b(exit|quit)\b', transcript, re.I):
-                gtk.main_quit()
+            yield result
 
 
 def main():
@@ -68,7 +72,12 @@ def main():
     def listen_to_microphone():
         with microphone as stream:
             responses = client.stream_responses(stream)
-            display_reponses(responses)
+            results = filter_responses(responses)
+            final_results = display_results(results)
+            for result in final_results:
+                transcript = result.alternatives[0].transcript.strip()
+                if re.search(r'\b(exit|quit)\b', transcript, re.I):
+                    gtk.main_quit()
 
     thread = threading.Thread(target=listen_to_microphone)
     thread.daemon = True
