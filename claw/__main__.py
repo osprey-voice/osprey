@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from . import gi_require_version as _
+from .app import gi_require_version as _
 
 from pathlib import Path
 import sys
@@ -12,9 +12,9 @@ from google.oauth2 import service_account
 import notify2
 from gi.repository import Gtk as gtk, AppIndicator3 as appindicator
 
-from .microphone import Microphone
-from .google_cloud_speech import Client
-from .indicator import Indicator
+from .app.microphone import Microphone
+from .app.google_cloud_speech import Client
+from .app.indicator import Indicator
 
 CREDENTIALS_FILE_NAME = 'credentials.json'
 LOG_FILE_NAME = 'logs.txt'

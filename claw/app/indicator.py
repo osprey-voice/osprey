@@ -1,6 +1,6 @@
 from gi.repository import Gtk as gtk, AppIndicator3 as appindicator
 
-from .open import open
+from ..open import open
 
 
 class Indicator():
