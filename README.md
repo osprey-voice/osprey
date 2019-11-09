@@ -1,5 +1,14 @@
 # claw
 
+
+
+For help getting started, check out:
+
+- [Getting Started with Voice Driven Development](https://whalequench.club/blog/2019/09/03/learning-to-speak-code.html)
+- [Talon Voice Control: basics](https://www.youtube.com/watch?v=oB5TGMEhQp4&feature=youtu.be)
+- [Unofficial Talon Docs](https://github.com/dwighthouse/unofficial-talonvoice-docs)
+- [talon_community](https://github.com/dwiel/talon_community)
+
 ## Requirements
 
 - Python 3.4+
