@@ -18,7 +18,7 @@ from .app.indicator import Indicator
 
 CREDENTIALS_FILE_NAME = 'credentials.json'
 LOG_FILE_NAME = 'logs.txt'
-APP_NAME = 'claw'
+APP_NAME = 'osprey'
 APP_NAME_CAPITALIZED = APP_NAME.capitalize()
 SAMPLE_RATE = 16000
 CHUNK_SIZE = SAMPLE_RATE // 10  # 100ms

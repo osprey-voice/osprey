@@ -2,7 +2,7 @@
 After=network.target
 
 [Service]
-ExecStart=claw
+ExecStart=osprey
 
 [Install]
 WantedBy=multi-user.target
