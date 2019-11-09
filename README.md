@@ -1,6 +1,6 @@
-# osprey
+# Osprey
 
-
+Osprey is a desktop program that runs as a daemon that allows for voice based computer input and usage. It is an open source version of [talonvoice](https://talonvoice.com/) and is being initially developed for Linux and Swaywm, with the eventual goal of being cross platform. It is highly configurable with Python, and there is already a thriving community of users with existing configurations that are ready to use. It uses Google Cloud Speech-to-Text for voice transcription but other engines are welcome to be incorporated.
 
 For help getting started, check out:
 
@@ -8,6 +8,7 @@ For help getting started, check out:
 - [Talon Voice Control: basics](https://www.youtube.com/watch?v=oB5TGMEhQp4&feature=youtu.be)
 - [Unofficial Talon Docs](https://github.com/dwighthouse/unofficial-talonvoice-docs)
 - [talon_community](https://github.com/dwiel/talon_community)
+- [Perl Out Loud](https://www.youtube.com/watch?v=Mz3JeYfBTcY)
 
 ## Requirements
 
