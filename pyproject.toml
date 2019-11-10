@@ -14,7 +14,8 @@ notify2 = "^0.3.1"
 dbus-python = "^1.2"
 pygobject = "^3.34"
 evdev = "^1.2"
-
+inputs = "^0.5.0"
+keyboard = {path = "./keyboard"}
 [tool.poetry.dev-dependencies]
 
 [tool.poetry.scripts]
