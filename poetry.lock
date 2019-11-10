@@ -40,6 +40,14 @@ version = "1.2.12"
 
 [[package]]
 category = "main"
+description = "Bindings to the Linux input handling subsystem"
+name = "evdev"
+optional = false
+python-versions = "*"
+version = "1.2.0"
+
+[[package]]
+category = "main"
 description = "Google API client core library"
 name = "google-api-core"
 optional = false
@@ -215,7 +223,7 @@ python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, <4"
 version = "1.25.6"
 
 [metadata]
-content-hash = "0b52b5d5f01a0effa530932db06d1795a886a2be631920c11ecf80698c17363c"
+content-hash = "bef70d09e64846b6c4099542bee1fe1b6739bcae87873510ee256578b4250707"
 python-versions = "^3.7"
 
 [metadata.hashes]
@@ -224,6 +232,7 @@ cachetools = ["428266a1c0d36dc5aca63a2d7c5942e88c2c898d72139fca0e97fdd2380517ae"
 certifi = ["e4f3620cfea4f83eedc95b24abd9cd56f3c4b146dd0177e83a21b4eb49e21e50", "fd7c7c74727ddcf00e9acd26bba8da604ffec95bf1c2144e67aff7a8b50e6cef"]
 chardet = ["84ab92ed1c4d4f16916e05906b6b75a6c0fb5db821cc65e70cbd64a3e2a5eaae", "fc323ffcaeaed0e0a02bf4d117757b98aed530d9ed4531e3e15460124c106691"]
 dbus-python = ["cdd4de2c4f5e58f287b12013ed7b41dee81d503c8d0d2397c5bd2fb01badf260"]
+evdev = ["b03f5e1be5b4a5327494a981b831d251a142b09e8778eda1a8b53eba91100166"]
 google-api-core = ["b95895a9398026bc0500cf9b4a3f82c3f72c3f9150b26ff53af40c74e91c264a", "df8adc4b97f5ab4328a0e745bee77877cf4a7d4601cb1cd5959d2bbf8fba57aa"]
 google-auth = ["0f7c6a64927d34c1a474da92cfc59e552a5d3b940d3266606c6a28b72888b9e4", "20705f6803fd2c4d1cc2dcb0df09d4dfcb9a7d51fd59e94a3a28231fd93119ed"]
 google-cloud-speech = ["9e094643f7e11b888ef7c42246784016a8f64ef45cdaba119631e624c9675be8", "f8a1f67b01b5b8bd22fa3ba95a4b99ae4a55b6299665d5ae1afa3db7f6706c32"]

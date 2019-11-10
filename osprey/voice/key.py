@@ -1,2 +1,4 @@
 def Key(key_string):
-    pass
+    def callback():
+        pass
+    return callback

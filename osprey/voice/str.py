@@ -1,2 +1,4 @@
 def Str(custom_string):
-    pass
+    def callback():
+        pass
+    return callback

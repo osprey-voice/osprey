@@ -11,10 +11,12 @@ import appdirs
 from google.oauth2 import service_account
 import notify2
 from gi.repository import Gtk as gtk, AppIndicator3 as appindicator
+import evdev
 
 from .app.microphone import Microphone
 from .app.google_cloud_speech import Client
 from .app.indicator import Indicator
+from .evdev import KEY_MAP
 
 CREDENTIALS_FILE_NAME = 'credentials.json'
 LOG_FILE_NAME = 'logs.txt'
@@ -79,12 +81,17 @@ def main():
 
     def listen_to_microphone():
         with microphone as stream:
-            responses = client.stream_responses(stream)
-            results = filter_invalid_responses(responses)
-            results = display_results(results)
-            final_results = filter_final_results(results)
-            for result in final_results:
-                pass
+            with evdev.UInput() as uinput:
+                responses = client.stream_responses(stream)
+                results = filter_invalid_responses(responses)
+                results = display_results(results)
+                final_results = filter_final_results(results)
+                for result in final_results:
+                    transcript = result.alternatives[0].transcript.strip()
+                    for char in transcript:
+                        uinput.write(evdev.ecodes.EV_KEY, KEY_MAP[char], 1)
+                        uinput.write(evdev.ecodes.EV_KEY, KEY_MAP[char], 0)
+                        uinput.syn()
 
     thread = threading.Thread(target=listen_to_microphone)
     thread.daemon = True
