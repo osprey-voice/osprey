@@ -1,4 +1,7 @@
-from ..voice import DEFAULT_CONTEXT_GROUP
+from .voice import DEFAULT_CONTEXT_GROUP
+
+
+engine = Engine()
 
 
 class Engine:
