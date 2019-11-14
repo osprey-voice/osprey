@@ -85,11 +85,17 @@ UTILS = {
     'voldown': 'volumedown',
 }
 
+WHITESPACE = {
+    ' ': 'space',
+    '\t': 'tab',
+}
+
 KEY_MAP.update({key: key for key in KEYS})
 KEY_MAP.update(PUNCTUATION)
 KEY_MAP.update(MODIFIERS)
 KEY_MAP.update(MISC)
 KEY_MAP.update(KEYPAD)
 KEY_MAP.update(UTILS)
+KEY_MAP.update(WHITESPACE)
 
 KEY_MAP = {key: ecodes[f'KEY_{value.upper()}'] for (key, value) in KEY_MAP.items() if value}
