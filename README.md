@@ -20,6 +20,16 @@ For help getting started, check out:
 - A (decent) microphone
 - A stable internet connection
 
+### Linux
+
+TODO
+
+```bash
+sudo cp 40-uinput.rules /etc/udev/rules.d/
+sudo groupadd uinput
+sudo usermod -a -G uinput $USER
+```
+
 ## Installation
 
 Install using [pipx](https://github.com/pipxproject/pipx) with:

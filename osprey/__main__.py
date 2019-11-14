@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 
-import keyboard
 from .app import gi_require_version as _
 
 from pathlib import Path
@@ -18,7 +17,6 @@ from .app.microphone import Microphone
 from .app.google_cloud_speech import Client
 from .app.indicator import Indicator
 from .evdev import KEY_MAP
-from inputs import get_key
 
 CREDENTIALS_FILE_NAME = 'credentials.json'
 LOG_FILE_NAME = 'logs.txt'
@@ -65,13 +63,6 @@ def filter_final_results(results):
 
 
 def main():
-    # keyboard.write('The quick brown fox jumps over the lazy dog.')
-    # keyboard.press_and_release('shift+s, space')
-
-    # events = get_key()
-    # for event in events:
-    #     print(event.ev_type, event.code, event.state)
-
     notify2.init(APP_NAME)
 
     app_dirs = appdirs.AppDirs(APP_NAME)

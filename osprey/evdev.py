@@ -42,12 +42,12 @@ PUNCTUATION = {
 
 MODIFIERS = {
     'ctrl': 'leftctrl',
-    'rctrl': 'righctrl',
+    'rctrl': 'rightctrl',
     'alt': 'leftalt',
     'ralt': 'rightalt',
     'cmd': None,
     'shift': 'leftshift',
-    'rshift': 'righshift',
+    'rshift': 'rightshift',
 }
 
 MISC = {
@@ -85,9 +85,11 @@ UTILS = {
     'voldown': 'volumedown',
 }
 
-KEY_MAP.update({key: ecodes[f'KEY_{key.upper()}'] for key in KEYS if key.upper() in ecodes})
+KEY_MAP.update({key: key for key in KEYS})
 KEY_MAP.update(PUNCTUATION)
 KEY_MAP.update(MODIFIERS)
 KEY_MAP.update(MISC)
 KEY_MAP.update(KEYPAD)
 KEY_MAP.update(UTILS)
+
+KEY_MAP = {key: ecodes[f'KEY_{value.upper()}'] for (key, value) in KEY_MAP.items() if value}
