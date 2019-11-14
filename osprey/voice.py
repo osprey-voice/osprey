@@ -51,7 +51,7 @@ class ContextGroup:
 
 
 DEFAULT_CONTEXT_GROUP = ContextGroup('default')
-CONTEXT_GROUPS = [DEFAULT_CONTEXT_GROUP]
+CONTEXT_GROUPS = {'default': DEFAULT_CONTEXT_GROUP}
 
 
 class Context:
