@@ -25,14 +25,33 @@ def Rep(repeate_count):
 
 def Str(custom_string):
     def callback():
-        pass
+        for char in custom_string:
+            press(char)
     return callback
 
 
 def Key(key_string):
     def callback():
-        pass
+        for key in key_string.split(' '):
+            press(key)
     return callback
+
+
+class ContextGroup:
+    def __init__(self, name):
+        self._name = name
+
+        self._contexts = {}
+
+    def _set_context(self, context):
+        self._contexts[context._name] = context
+
+    def load(self):
+        pass
+
+
+DEFAULT_CONTEXT_GROUP = ContextGroup('default')
+CONTEXT_GROUPS = [DEFAULT_CONTEXT_GROUP]
 
 
 class Context:
@@ -57,20 +76,3 @@ class Context:
 
     def set_list(self, name, keys):
         self._lists[name] = keys
-
-
-class ContextGroup:
-    def __init__(self, name):
-        self._name = name
-
-        self._contexts = {}
-
-    def _set_context(self, context):
-        self._contexts[context._name] = context
-
-    def load(self):
-        pass
-
-
-DEFAULT_CONTEXT_GROUP = ContextGroup('default')
-CONTEXT_GROUPS = [DEFAULT_CONTEXT_GROUP]
