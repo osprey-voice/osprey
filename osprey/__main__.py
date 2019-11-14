@@ -89,8 +89,14 @@ def main():
                 for result in final_results:
                     transcript = result.alternatives[0].transcript.strip()
                     for char in transcript:
-                        uinput.write(evdev.ecodes.EV_KEY, KEY_MAP[char], 1)
-                        uinput.write(evdev.ecodes.EV_KEY, KEY_MAP[char], 0)
+                        if isinstance(KEY_MAP[char], list):
+                            uinput.write(evdev.ecodes.EV_KEY, KEY_MAP[char][0], 1)
+                            uinput.write(evdev.ecodes.EV_KEY, KEY_MAP[char][1], 1)
+                            uinput.write(evdev.ecodes.EV_KEY, KEY_MAP[char][1], 0)
+                            uinput.write(evdev.ecodes.EV_KEY, KEY_MAP[char][0], 0)
+                        else:
+                            uinput.write(evdev.ecodes.EV_KEY, KEY_MAP[char], 1)
+                            uinput.write(evdev.ecodes.EV_KEY, KEY_MAP[char], 0)
                         uinput.syn()
 
     thread = threading.Thread(target=listen_to_microphone)

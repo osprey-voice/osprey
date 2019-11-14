@@ -2,7 +2,7 @@ import string
 
 KEYS = []
 
-LETTERS = list(string.ascii_lowercase)
+LETTERS = list(string.ascii_letters)
 
 NUMBERS = list(string.digits)
 

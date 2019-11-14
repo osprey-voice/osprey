@@ -6,12 +6,12 @@ from .keys import KEYS
 KEY_MAP = {}
 
 PUNCTUATION = {
-    '!': None,
-    '"': None,
-    '#': None,
+    '!': ['shift', '1'],
+    '"': ['shift', '\''],
+    '#': ['shift', '3'],
     '$': 'dollar',
-    '%': None,
-    '&': None,
+    '%': ['shift', '5'],
+    '&': ['shift', '7'],
     '\'': 'apostrophe',
     '(': 'kpleftparen',
     ')': 'kprightparen',
@@ -21,23 +21,23 @@ PUNCTUATION = {
     '-': 'minus',
     '.': 'dot',
     '/': 'slash',
-    ':': None,
+    ':': ['shift', ';'],
     ';': 'semicolon',
-    '<': None,
+    '<': ['shift', ','],
     '=': 'equal',
-    '>': None,
+    '>': ['shift', '.'],
     '?': 'question',
-    '@': None,
+    '@': ['shift', '2'],
     '[': None,
     '\\': 'backslash',
     ']': None,
-    '^': None,
-    '_': None,
+    '^': ['shift', '6'],
+    '_': ['shift', '-'],
     '`': 'grave',
     '{': 'leftbrace',
-    '|': None,
+    '|': ['shift', '\\'],
     '}': 'rightbrace',
-    '~': None,
+    '~': ['shift', '`'],
 }
 
 MODIFIERS = {
@@ -91,6 +91,7 @@ WHITESPACE = {
 }
 
 KEY_MAP.update({key: key for key in KEYS})
+KEY_MAP.update({key: ['shift', key.lower()] for key in KEYS if key.isupper()})
 KEY_MAP.update(PUNCTUATION)
 KEY_MAP.update(MODIFIERS)
 KEY_MAP.update(MISC)
@@ -98,4 +99,7 @@ KEY_MAP.update(KEYPAD)
 KEY_MAP.update(UTILS)
 KEY_MAP.update(WHITESPACE)
 
-KEY_MAP = {key: ecodes[f'KEY_{value.upper()}'] for (key, value) in KEY_MAP.items() if value}
+KEY_MAP.update({key: ecodes[f'KEY_{value.upper()}']
+                for (key, value) in KEY_MAP.items() if isinstance(value, str)})
+KEY_MAP.update({key: [KEY_MAP[value[0]], KEY_MAP[value[1]]]
+                for (key, value) in KEY_MAP.items() if isinstance(value, list)})
