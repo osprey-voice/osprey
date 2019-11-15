@@ -37,21 +37,22 @@ def Key(key_string):
     return callback
 
 
+CONTEXT_GROUPS = {}
+
+
 class ContextGroup:
     def __init__(self, name):
         self._name = name
 
         self._contexts = {}
 
-    def _set_context(self, context):
-        self._contexts[context._name] = context
+        CONTEXT_GROUPS[name] = self
 
     def load(self):
         pass
 
 
 DEFAULT_CONTEXT_GROUP = ContextGroup('default')
-CONTEXT_GROUPS = {'default': DEFAULT_CONTEXT_GROUP}
 
 
 class Context:
@@ -69,7 +70,7 @@ class Context:
         self._keymap = None
         self._lists = {}
 
-        self._group._set_context(self)
+        group._contexts[name] = self
 
     def keymap(self, keymap):
         self._keymap = keymap
