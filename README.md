@@ -42,7 +42,7 @@ pipx install --spec git+https://github.com/cjbassi/osprey osprey
 
 Run `osprey`, which runs as a daemon.
 
-Optionally, you can start and enable the [`osprey.service`](./osprey.service) systemd service file to run `osprey` as a systemd service.
+Optionally, you can start and enable the [`osprey.service`](./osprey.service) systemd service file to run Osprey as a systemd service.
 
 To setup the systemd service:
 
