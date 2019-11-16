@@ -1,40 +1,34 @@
 import evdev
+import re
 
 from ..evdev import KEY_MAP
 
 
 def press(key_string):
-    keys = key_string.split('-')
-    for key in keys:
-        if isinstance(KEY_MAP[key], list):
-            uinput.write(evdev.ecodes.EV_KEY, KEY_MAP[key][0], 1)
-            uinput.write(evdev.ecodes.EV_KEY, KEY_MAP[key][1], 1)
-        else:
-            uinput.write(evdev.ecodes.EV_KEY, KEY_MAP[key], 1)
-    for key in reverse(keys):
-        if isinstance(KEY_MAP[key], list):
-            uinput.write(evdev.ecodes.EV_KEY, KEY_MAP[key][1], 0)
-            uinput.write(evdev.ecodes.EV_KEY, KEY_MAP[key][0], 0)
-        else:
-            uinput.write(evdev.ecodes.EV_KEY, KEY_MAP[key], 0)
+    key_combinations = key_string.split(' ')
+    for key_combination in key_combinations:
+        keys = key_combination.split('-')
+        for key in keys:
+            if isinstance(KEY_MAP[key], list):
+                uinput.write(evdev.ecodes.EV_KEY, KEY_MAP[key][0], 1)
+                uinput.write(evdev.ecodes.EV_KEY, KEY_MAP[key][1], 1)
+            else:
+                uinput.write(evdev.ecodes.EV_KEY, KEY_MAP[key], 1)
+        for key in reverse(keys):
+            if isinstance(KEY_MAP[key], list):
+                uinput.write(evdev.ecodes.EV_KEY, KEY_MAP[key][1], 0)
+                uinput.write(evdev.ecodes.EV_KEY, KEY_MAP[key][0], 0)
+            else:
+                uinput.write(evdev.ecodes.EV_KEY, KEY_MAP[key], 0)
 
 
-def Rep(repeate_count):
+def insert(custom_string):
+    for char in custom_string:
+        press(char)
+
+
+def repeate(count):
     pass
-
-
-def Str(custom_string):
-    def callback():
-        for char in custom_string:
-            press(char)
-    return callback
-
-
-def Key(key_string):
-    def callback():
-        for key in key_string.split(' '):
-            press(key)
-    return callback
 
 
 CONTEXT_GROUPS = {}
@@ -73,15 +67,12 @@ class Context:
 
         group._contexts[name] = self
 
-    def keymap(self, keymap):
+    def set_keymap(self, keymap):
         self._keymap = keymap
-
-    def set_list(self, name, keys):
-        self._lists[name] = keys
 
     def _compile(self):
         for string, callback in self._keymap.items():
-            self._regexes[string] = callback
+            self._regexes[re.compile(string)] = callback
 
     def _match(self, input):
         for regex, callback in self._regexes.items():
