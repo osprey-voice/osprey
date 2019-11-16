@@ -67,7 +67,8 @@ class Context:
         self._func = func
         self._group = group
 
-        self._keymap = None
+        self._keymap = {}
+        self._regexes = {}
         self._lists = {}
 
         group._contexts[name] = self
@@ -77,3 +78,15 @@ class Context:
 
     def set_list(self, name, keys):
         self._lists[name] = keys
+
+    def _compile(self):
+        for string, callback in self._keymap.items():
+            self._regexes[string] = callback
+
+    def _match(self, input):
+        for regex, callback in self._regexes.items():
+            match = regex.fullmatch(input)
+            if match:
+                callback(match.group(0))
+                return True
+        return False

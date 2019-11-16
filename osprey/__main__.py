@@ -17,6 +17,7 @@ from .app.microphone import Microphone
 from .app.google_cloud_speech import Client
 from .app.indicator import Indicator
 from .evdev import KEY_MAP
+from .voice import CONTEXT_GROUPS
 
 CREDENTIALS_FILE_NAME = 'credentials.json'
 LOG_FILE_NAME = 'logs.txt'
@@ -79,6 +80,13 @@ def main():
     client = Client(credentials, SAMPLE_RATE)
     Indicator(APP_NAME, config_dir, log_file)
 
+    # read scripts
+
+    # compile regexes
+    for context_group in CONTEXT_GROUPS:
+        for context in context_group._contexts:
+            context._compile()
+
     def listen_to_microphone():
         with microphone as stream:
             with evdev.UInput() as uinput:
@@ -88,16 +96,13 @@ def main():
                 final_results = filter_final_results(results)
                 for result in final_results:
                     transcript = result.alternatives[0].transcript.strip()
-                    for char in transcript:
-                        if isinstance(KEY_MAP[char], list):
-                            uinput.write(evdev.ecodes.EV_KEY, KEY_MAP[char][0], 1)
-                            uinput.write(evdev.ecodes.EV_KEY, KEY_MAP[char][1], 1)
-                            uinput.write(evdev.ecodes.EV_KEY, KEY_MAP[char][1], 0)
-                            uinput.write(evdev.ecodes.EV_KEY, KEY_MAP[char][0], 0)
-                        else:
-                            uinput.write(evdev.ecodes.EV_KEY, KEY_MAP[char], 1)
-                            uinput.write(evdev.ecodes.EV_KEY, KEY_MAP[char], 0)
-                        uinput.syn()
+
+                    def search():
+                        for context_group in CONTEXT_GROUPS:
+                            for context in context_group._contexts:
+                                if context._match(transcript):
+                                    return
+                    search()
 
     thread = threading.Thread(target=listen_to_microphone)
     thread.daemon = True
