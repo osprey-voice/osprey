@@ -6,6 +6,7 @@ from pathlib import Path
 import sys
 import re
 import threading
+import importlib
 
 import appdirs
 from google.oauth2 import service_account
@@ -81,6 +82,9 @@ def main():
     Indicator(APP_NAME, config_dir, log_file)
 
     # read scripts
+    for file in config_dir.iterdir():
+        if file.is_file() and file.suffix == '.py':
+            importlib.import_module(file)
 
     # compile regexes
     for context_group in CONTEXT_GROUPS:
