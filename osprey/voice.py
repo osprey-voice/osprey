@@ -42,9 +42,6 @@ class ContextGroup:
 
         CONTEXT_GROUPS[name] = self
 
-    def load(self):
-        pass
-
 
 DEFAULT_CONTEXT_GROUP = ContextGroup('default')
 
