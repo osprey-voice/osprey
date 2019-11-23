@@ -3,6 +3,8 @@ import re
 
 from .evdev import KEY_MAP
 
+uinput = evdev.UInput()
+
 
 def press(key_string):
     key_combinations = key_string.split(' ')

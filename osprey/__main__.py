@@ -93,20 +93,19 @@ def main():
 
     def listen_to_microphone():
         with microphone as stream:
-            with evdev.UInput() as uinput:
-                responses = client.stream_responses(stream)
-                results = filter_invalid_responses(responses)
-                results = display_results(results)
-                final_results = filter_final_results(results)
-                for result in final_results:
-                    transcript = result.alternatives[0].transcript.strip()
+            responses = client.stream_responses(stream)
+            results = filter_invalid_responses(responses)
+            results = display_results(results)
+            final_results = filter_final_results(results)
+            for result in final_results:
+                transcript = result.alternatives[0].transcript.strip()
 
-                    def search():
-                        for context_group in CONTEXT_GROUPS:
-                            for context in context_group._contexts:
-                                if context._match(transcript):
-                                    return
-                    search()
+                def search():
+                    for context_group in CONTEXT_GROUPS:
+                        for context in context_group._contexts:
+                            if context._match(transcript):
+                                return
+                search()
 
     thread = threading.Thread(target=listen_to_microphone)
     thread.daemon = True
