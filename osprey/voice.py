@@ -1,7 +1,7 @@
 import evdev
 import re
 
-from ..evdev import KEY_MAP
+from .evdev import KEY_MAP
 
 
 def press(key_string):
@@ -78,6 +78,6 @@ class Context:
         for regex, callback in self._regexes.items():
             match = regex.fullmatch(input)
             if match:
-                callback(match.group(0))
+                callback(match)
                 return True
         return False

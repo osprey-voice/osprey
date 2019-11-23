@@ -84,7 +84,7 @@ def main():
     # read scripts
     for file in config_dir.iterdir():
         if file.is_file() and file.suffix == '.py':
-            importlib.import_module(file)
+            importlib.import_module(str(file))
 
     # compile regexes
     for context_group in CONTEXT_GROUPS:
