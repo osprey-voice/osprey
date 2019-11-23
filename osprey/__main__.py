@@ -88,8 +88,8 @@ def main():
             importlib.import_module(file.stem)
 
     # compile regexes
-    for context_group in CONTEXT_GROUPS:
-        for context in context_group._contexts:
+    for context_group in CONTEXT_GROUPS.values():
+        for context in context_group._contexts.values():
             context._compile()
 
     def listen_to_microphone():
@@ -102,8 +102,8 @@ def main():
                 transcript = result.alternatives[0].transcript.strip()
 
                 def search():
-                    for context_group in CONTEXT_GROUPS:
-                        for context in context_group._contexts:
+                    for context_group in CONTEXT_GROUPS.values():
+                        for context in context_group._contexts.values():
                             if context._match(transcript):
                                 return
                 search()

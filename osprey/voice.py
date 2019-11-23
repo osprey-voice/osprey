@@ -16,7 +16,7 @@ def press(key_string):
                 uinput.write(evdev.ecodes.EV_KEY, KEY_MAP[key][1], 1)
             else:
                 uinput.write(evdev.ecodes.EV_KEY, KEY_MAP[key], 1)
-        for key in reverse(keys):
+        for key in keys[::-1]:
             if isinstance(KEY_MAP[key], list):
                 uinput.write(evdev.ecodes.EV_KEY, KEY_MAP[key][1], 0)
                 uinput.write(evdev.ecodes.EV_KEY, KEY_MAP[key][0], 0)
