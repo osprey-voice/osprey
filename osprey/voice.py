@@ -88,7 +88,6 @@ class Context:
 
         self._keymap = {}
         self._regexes = {}
-        self._lists = {}
 
         group._contexts[name] = self
 
