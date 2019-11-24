@@ -28,7 +28,7 @@ def is_enabled():
 
 
 def press(key_string):
-    key_combinations = [' '] if key_string == ' ' else key_string.split(' ')
+    key_combinations = key_string.split(' ')
     for key_combination in key_combinations:
         keys = key_combination.split('-')
         for key in keys:
@@ -47,7 +47,12 @@ def press(key_string):
 
 def insert(custom_string):
     for char in custom_string:
-        press(char)
+        if char == ' ':
+            press('Space')
+        if char == '\t':
+            press('Tab')
+        else:
+            press(char)
 
 
 def repeate(count):
