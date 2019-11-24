@@ -74,6 +74,29 @@ class ContextGroup:
 DEFAULT_CONTEXT_GROUP = ContextGroup('default')
 
 
+def _convert_keymap(keymap, lists):
+    def named_regex(name, regex):
+        return r'(?P<{}>{})'.format(name, regex)
+
+    def list_to_regex(list):
+        return r'(\b({})\b\s?)'.format('|'.join(list))
+
+    quantifiers = ['*', '+']
+
+    regexes = {key: list_to_regex(val) for key, val in lists.items()}
+    quantified_regexes = {f'{key}{quantifier}': rf'{val}{quantifier}' for key,
+                          val in regexes.items() for quantifier in quantifiers}
+    named_regexes = {key: named_regex(key[:-1], val) for key, val in quantified_regexes.items()}
+
+    def convert_rule(rule):
+        return rule.format(**named_regexes)
+
+    def convert_match(match, lists):
+        return {key: match.group(key).split(' ') for key in lists if key in match.groupdict()}
+
+    return {convert_rule(key): lambda m: val(convert_match(m, lists)) for key, val in keymap.items()}
+
+
 class Context:
     def __init__(self, name, app=None, exe=None, bundle=None,
                  title=None, func=None, group=DEFAULT_CONTEXT_GROUP):
@@ -88,14 +111,19 @@ class Context:
 
         self._keymap = {}
         self._regexes = {}
+        self._lists = {}
 
         group._contexts[name] = self
 
     def set_keymap(self, keymap):
         self._keymap = keymap
 
+    def set_lists(self, lists):
+        self._lists = lists
+
     def _compile(self):
-        for string, callback in self._keymap.items():
+        keymap = _convert_keymap(self._keymap, self._lists)
+        for string, callback in keymap.items():
             self._regexes[re.compile(string)] = callback
 
     def _match(self, input):
