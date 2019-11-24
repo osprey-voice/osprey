@@ -13,7 +13,6 @@ MODIFIERS = [
     'rctrl',
     'alt',
     'ralt',
-    'cmd',
     'shift',
     'rshift',
     'fn',
@@ -22,10 +21,7 @@ MODIFIERS = [
 MISC = [
     'capslock',
     'backspace',
-    'bksp',
     'delete',
-    'del',
-    'return',
     'enter',
     'space',
     'tab',
@@ -34,12 +30,9 @@ MISC = [
     'left',
     'right',
     'pageup',
-    'pgup',
     'pagedown',
-    'pgdown',
     'home',
     'end',
-    'escape',
     'esc',
 ]
 
@@ -66,31 +59,9 @@ FUNCTION = [
     'f20',
 ]
 
-KEYPAD = [
-    'keypad_0',
-    'keypad_1',
-    'keypad_2',
-    'keypad_3',
-    'keypad_4',
-    'keypad_5',
-    'keypad_6',
-    'keypad_7',
-    'keypad_8',
-    'keypad_9',
-    'keypad_clear',
-    'keypad_equals',
-    'keypad_divide',
-    'keypad_multiply',
-    'keypad_minus',
-    'keypad_plus',
-    'keypad_decimal',
-    'keypad_enter',
-]
-
 UTILS = [
-    'help',
-    'volup',
-    'voldown',
+    'volumeup',
+    'volumedown',
     'mute',
 ]
 
@@ -99,4 +70,4 @@ WHITESPACE = [
     '\t',
 ]
 
-KEYS = LETTERS + NUMBERS + PUNCTUATION + MODIFIERS + MISC + FUNCTION + KEYPAD + UTILS + WHITESPACE
+KEYS = LETTERS + NUMBERS + PUNCTUATION + MODIFIERS + MISC + FUNCTION + UTILS + WHITESPACE
