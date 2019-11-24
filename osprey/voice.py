@@ -7,7 +7,7 @@ uinput = evdev.UInput()
 
 
 def press(key_string):
-    key_combinations = key_string.split(' ')
+    key_combinations = [' '] if key_string == ' ' else key_string.split(' ')
     for key_combination in key_combinations:
         keys = key_combination.split('-')
         for key in keys:
