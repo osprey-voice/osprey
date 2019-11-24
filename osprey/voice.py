@@ -77,6 +77,10 @@ class Context:
         for regex, callback in self._regexes.items():
             match = regex.fullmatch(input)
             if match:
-                callback(match)
+                if isinstance(callback, list):
+                    for cb in callback:
+                        cb(match)
+                else:
+                    callback(match)
                 return True
         return False
