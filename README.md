@@ -22,7 +22,7 @@ For help getting started, check out:
 
 ### Linux
 
-TODO
+In order to simulate keypresses on Linux, the current user needs to gain write access to `/dev/uinput`. To enable this, we first need to change the permissions on `/dev/uinput` to allow for members of the `uinput` group to write to it, which we do with a udev rule. Then we create the `uinput` group and add the current user to it. Make sure to restart your computer after doing the following to allow for the udev rule to go into effect.
 
 ```bash
 sudo cp 40-uinput.rules /etc/udev/rules.d/
