@@ -83,9 +83,10 @@ def main():
 
     # read scripts
     sys.path.append(str(config_dir))
-    for file in config_dir.iterdir():
-        if file.is_file() and file.suffix == '.py' and file.stem != '':
-            importlib.import_module(file.stem)
+    for path in config_dir.glob('**/*.py'):
+        if path.is_file() and path.stem != '':
+            parts = list(path.parts[len(config_dir.parts):-1]) + [path.stem]
+            importlib.import_module('.'.join(parts))
 
     # compile regexes
     for context_group in CONTEXT_GROUPS.values():
