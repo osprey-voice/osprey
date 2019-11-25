@@ -84,7 +84,7 @@ def main():
     # read scripts
     sys.path.append(str(config_dir))
     for file in config_dir.iterdir():
-        if file.is_file() and file.suffix == '.py':
+        if file.is_file() and file.suffix == '.py' and file.stem != '':
             importlib.import_module(file.stem)
 
     # compile regexes
