@@ -43,6 +43,7 @@ def press(key_string):
                 uinput.write(evdev.ecodes.EV_KEY, KEY_MAP[key][0], 0)
             else:
                 uinput.write(evdev.ecodes.EV_KEY, KEY_MAP[key], 0)
+    uinput.syn()
 
 
 def insert(custom_string):
