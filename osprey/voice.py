@@ -95,7 +95,18 @@ def _convert_keymap(keymap, lists):
     def convert_match(match, lists):
         return {key: match.group(key).split(' ') for key in lists if key in match.groupdict() and match.group(key)}
 
-    return {convert_rule(key): lambda m: val(convert_match(m, lists)) for key, val in keymap.items()}
+    converted = {}
+    for key, val in keymap.items():
+        def callback(m):
+            if isinstance(val, list):
+                converted_match = convert_match(m, lists)
+                for cb in val:
+                    cb(converted_match)
+            else:
+                val(convert_match(m, lists))
+        converted[convert_rule(key)] = callback
+
+    return converted
 
 
 class Context:
@@ -131,10 +142,6 @@ class Context:
         for regex, callback in self._regexes.items():
             match = regex.fullmatch(input)
             if match:
-                if isinstance(callback, list):
-                    for cb in callback:
-                        cb(match)
-                else:
-                    callback(match)
+                callback(match)
                 return True
         return False
