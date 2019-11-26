@@ -92,7 +92,7 @@ def _convert_keymap(keymap, lists):
         return rule.format(**named_regexes)
 
     def convert_match(match, lists):
-        return {key: match.group(key).split(' ') for key in lists if key in match.groupdict()}
+        return {key: match.group(key).split(' ') for key in lists if key in match.groupdict() and match.group(key)}
 
     return {convert_rule(key): lambda m: val(convert_match(m, lists)) for key, val in keymap.items()}
 
