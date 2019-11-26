@@ -60,7 +60,7 @@ def repeate(count):
     pass
 
 
-CONTEXT_GROUPS = {}
+context_groups = {}
 
 
 class ContextGroup:
@@ -69,10 +69,10 @@ class ContextGroup:
 
         self._contexts = {}
 
-        CONTEXT_GROUPS[name] = self
+        context_groups[name] = self
 
 
-DEFAULT_CONTEXT_GROUP = ContextGroup('default')
+default_context_group = ContextGroup('default')
 
 
 def _convert_keymap(keymap, lists):
@@ -111,7 +111,7 @@ def _convert_keymap(keymap, lists):
 
 class Context:
     def __init__(self, name, app=None, exe=None, bundle=None,
-                 title=None, func=None, group=DEFAULT_CONTEXT_GROUP):
+                 title=None, func=None, group=default_context_group):
         self._name = name
 
         self._app = app

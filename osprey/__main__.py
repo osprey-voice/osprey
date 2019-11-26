@@ -18,7 +18,7 @@ from .app.microphone import Microphone
 from .app.google_cloud_speech import Client
 from .app.indicator import Indicator
 from .evdev import KEY_MAP
-from .voice import CONTEXT_GROUPS
+from .voice import context_groups
 
 CREDENTIALS_FILE_NAME = 'credentials.json'
 LOG_FILE_NAME = 'logs.txt'
@@ -62,7 +62,7 @@ def read_scripts(config_dir):
 
 
 def compile_regexes():
-    for context_group in CONTEXT_GROUPS.values():
+    for context_group in context_groups.values():
         for context in context_group._contexts.values():
             context._compile()
 
@@ -72,7 +72,7 @@ def match_results(results):
         transcript = result.transcript
 
         def search():
-            for context_group in CONTEXT_GROUPS.values():
+            for context_group in context_groups.values():
                 for context in context_group._contexts.values():
                     if context._match(transcript):
                         return
