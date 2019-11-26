@@ -28,21 +28,11 @@ SAMPLE_RATE = 16000
 CHUNK_SIZE = SAMPLE_RATE // 10  # 100ms
 
 
-def filter_invalid_responses(responses):
-    for response in responses:
-        if not response.results:
-            continue
-        result = response.results[0]
-        if not result.alternatives:
-            continue
-        yield result
-
-
 def display_results(results):
     notification = None
 
     for result in results:
-        transcript = result.alternatives[0].transcript.strip()
+        transcript = result.transcript
 
         if not result.is_final:
             if notification:
@@ -95,12 +85,11 @@ def main():
 
     def listen_to_microphone():
         with microphone as stream:
-            responses = client.stream_responses(stream)
-            results = filter_invalid_responses(responses)
+            results = client.stream_results(stream)
             results = display_results(results)
-            final_results = filter_final_results(results)
-            for result in final_results:
-                transcript = result.alternatives[0].transcript.strip()
+            results = filter_final_results(results)
+            for result in results:
+                transcript = result.transcript
 
                 def search():
                     for context_group in CONTEXT_GROUPS.values():
