@@ -54,6 +54,31 @@ def filter_final_results(results):
             yield result
 
 
+def read_scripts(config_dir):
+    for path in config_dir.glob('**/*.py'):
+        if path.is_file() and path.stem != '':
+            parts = list(path.parts[len(config_dir.parts):-1]) + [path.stem]
+            importlib.import_module('.'.join(parts))
+
+
+def compile_regexes():
+    for context_group in CONTEXT_GROUPS.values():
+        for context in context_group._contexts.values():
+            context._compile()
+
+
+def match_results(results):
+    for result in results:
+        transcript = result.transcript
+
+        def search():
+            for context_group in CONTEXT_GROUPS.values():
+                for context in context_group._contexts.values():
+                    if context._match(transcript):
+                        return
+        search()
+
+
 def main():
     notify2.init(APP_NAME)
 
@@ -71,32 +96,16 @@ def main():
     client = Client(credentials, SAMPLE_RATE)
     Indicator(APP_NAME, config_dir, log_file)
 
-    # read scripts
     sys.path.append(str(config_dir))
-    for path in config_dir.glob('**/*.py'):
-        if path.is_file() and path.stem != '':
-            parts = list(path.parts[len(config_dir.parts):-1]) + [path.stem]
-            importlib.import_module('.'.join(parts))
-
-    # compile regexes
-    for context_group in CONTEXT_GROUPS.values():
-        for context in context_group._contexts.values():
-            context._compile()
+    read_scripts(config_dir)
+    compile_regexes()
 
     def listen_to_microphone():
         with microphone as stream:
             results = client.stream_results(stream)
             results = display_results(results)
             results = filter_final_results(results)
-            for result in results:
-                transcript = result.transcript
-
-                def search():
-                    for context_group in CONTEXT_GROUPS.values():
-                        for context in context_group._contexts.values():
-                            if context._match(transcript):
-                                return
-                search()
+            match_results(results)
 
     thread = threading.Thread(target=listen_to_microphone)
     thread.daemon = True
