@@ -19,6 +19,7 @@ from .app.google_cloud_speech import Client
 from .app.indicator import Indicator
 from .evdev import KEY_MAP
 from .voice import context_groups
+from . import homophones
 
 CREDENTIALS_FILE_NAME = 'credentials.json'
 LOG_FILE_NAME = 'logs.txt'
