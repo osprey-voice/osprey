@@ -46,6 +46,7 @@ class Indicator():
             sub_menu = gtk.Menu()
 
             sub_item = gtk.CheckMenuItem('Enable')
+            sub_item.set_active(True)
             sub_menu.append(sub_item)
 
             separator = gtk.SeparatorMenuItem()
