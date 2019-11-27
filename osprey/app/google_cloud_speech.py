@@ -3,6 +3,12 @@ from google.cloud import speech
 from .engine import EngineResult
 
 
+CORRECTIONS = {
+    'alt1': 'alt 1',
+    'alt2': 'alt 2',
+}
+
+
 class Client:
     def __init__(self, credentials, sample_rate):
         self._credentials = credentials
@@ -34,9 +40,17 @@ class Client:
         for result in results:
             yield EngineResult(result.is_final, result.alternatives[0].transcript.strip())
 
+    def _correct_transcript(self, results):
+        for result in results:
+            transcript = result.transcript
+            for key, val in CORRECTIONS.items():
+                transcript = transcript.replace(key, val)
+            yield result._replace(transcript=transcript)
+
     def stream_results(self, stream):
         requests = self._convert_requests(stream)
         responses = self._client.streaming_recognize(self._streaming_config, requests)
         results = self._filter_invalid_responses(responses)
         results = self._convert_results(results)
+        results = self._correct_transcript(results)
         return results
