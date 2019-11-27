@@ -43,6 +43,7 @@ PUNCTUATION = {
 }
 
 MODIFIERS = {
+    'Cmd': None,
     'Ctrl': 'leftctrl',
     'Alt': 'leftalt',
     'Shift': 'leftshift',
