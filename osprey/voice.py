@@ -97,7 +97,7 @@ def _convert_keymap(keymap, lists):
 
     converted = {}
     for key, val in keymap.items():
-        def callback(m):
+        def callback(m, val=val):
             if isinstance(val, list):
                 converted_match = convert_match(m, lists)
                 for cb in val:
