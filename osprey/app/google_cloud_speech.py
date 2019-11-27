@@ -27,7 +27,7 @@ class Client:
                     for content in stream)
         return requests
 
-    def _filter_invalid_responses(self, responses):
+    def _process_responses(self, responses):
         for response in responses:
             if not response.results:
                 continue
@@ -50,7 +50,7 @@ class Client:
     def stream_results(self, stream):
         requests = self._convert_requests(stream)
         responses = self._client.streaming_recognize(self._streaming_config, requests)
-        results = self._filter_invalid_responses(responses)
+        results = self._process_responses(responses)
         results = self._convert_results(results)
         results = self._correct_transcript(results)
         return results
