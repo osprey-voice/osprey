@@ -97,6 +97,8 @@ def _convert_keymap(keymap, lists):
 
     converted = {}
     for key, val in keymap.items():
+        # `val=val` used to fix late binding
+        # https://stackoverflow.com/questions/3431676/creating-functions-in-a-loop
         def callback(m, val=val):
             if isinstance(val, list):
                 converted_match = convert_match(m, lists)
