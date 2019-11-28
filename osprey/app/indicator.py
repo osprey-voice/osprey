@@ -65,6 +65,19 @@ class Indicator():
             sub_item.set_submenu(create_language_menu())
             sub_menu.append(sub_item)
 
+            sub_item = gtk.MenuItem('Engine:')
+
+            def create_engine_menu():
+                sub_menu = gtk.Menu()
+
+                sub_item = gtk.MenuItem('Google Cloud Speech-to-Text')
+                sub_menu.append(sub_item)
+
+                return sub_menu
+
+            sub_item.set_submenu(create_engine_menu())
+            sub_menu.append(sub_item)
+
             return sub_menu
 
         item.set_submenu(create_speech_recognition_menu())
