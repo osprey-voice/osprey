@@ -20,6 +20,7 @@ from .app.indicator import Indicator
 from .evdev import KEY_MAP
 from .voice import context_groups
 from . import homophones
+from . import digits
 
 CREDENTIALS_FILE_NAME = 'credentials.json'
 LOG_FILE_NAME = 'logs.txt'
