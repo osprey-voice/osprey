@@ -10,4 +10,6 @@ HOMOPHONES_FILEPATH = Path(__file__).parent / HOMOPHONES_FILENAME
 for line in HOMOPHONES_FILEPATH.read_text().splitlines():
     words = sorted(line.split(","))
     for word in words:
-        HOMOPHONES[word.lower()] = words
+        words_copy = words.copy()
+        words_copy.remove(word)
+        HOMOPHONES[word.lower()] = words_copy
