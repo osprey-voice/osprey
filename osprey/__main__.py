@@ -94,7 +94,7 @@ def main():
 
     credentials_file_path = config_dir.joinpath(CREDENTIALS_FILE_NAME)
     if not credentials_file_path.exists():
-        sys.exit("TODO")
+        sys.exit("Could not find a credentials file for Google Cloud Speech-to-Text")
     credentials = service_account.Credentials.from_service_account_file(credentials_file_path)
 
     microphone = Microphone(SAMPLE_RATE, CHUNK_SIZE)
