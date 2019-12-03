@@ -60,7 +60,10 @@ def read_scripts(config_dir):
     for path in config_dir.glob('**/*.py'):
         if path.is_file() and path.stem != '':
             parts = list(path.parts[len(config_dir.parts):-1]) + [path.stem]
-            importlib.import_module('.'.join(parts))
+            try:
+                importlib.import_module('.'.join(parts))
+            except Exception as e:
+                print(f'Error occurred while loading \'{path}\': {e}', file=sys.stderr)
 
 
 def compile_regexes():
