@@ -29,8 +29,6 @@ APP_NAME_CAPITALIZED = APP_NAME.capitalize()
 SAMPLE_RATE = 16000
 CHUNK_SIZE = SAMPLE_RATE // 10  # 100ms
 
-notification = None
-
 
 def read_scripts(config_dir):
     for path in config_dir.glob('**/*.py'):
@@ -48,9 +46,8 @@ def compile_regexes():
             context._compile()
 
 
-def display_result(result):
+def display_result(result, notification):
     transcript = result.transcript
-    global notification
 
     if not result.is_final:
         if notification:
@@ -63,6 +60,8 @@ def display_result(result):
         notification.show()
         notification = None
 
+    return notification
+
 
 def match_result(result):
     transcript = result.transcript
@@ -70,6 +69,17 @@ def match_result(result):
         for context in context_group._contexts.values():
             if context._match(transcript):
                 return
+
+
+def listen_to_microphone(microphone, client):
+    notification = None
+
+    with microphone as stream:
+        results = client.stream_results(stream)
+        for result in results:
+            notification = display_result(result, notification)
+            if result.is_final:
+                match_result(result)
 
 
 def main():
@@ -93,15 +103,7 @@ def main():
     read_scripts(config_dir)
     compile_regexes()
 
-    def listen_to_microphone():
-        with microphone as stream:
-            results = client.stream_results(stream)
-            for result in results:
-                display_result(result)
-                if result.is_final:
-                    match_result(result)
-
-    thread = threading.Thread(target=listen_to_microphone)
+    thread = threading.Thread(target=listen_to_microphone, args=(microphone, client))
     thread.daemon = True
     thread.start()
 
