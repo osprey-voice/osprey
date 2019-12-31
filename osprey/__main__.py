@@ -10,8 +10,7 @@ import importlib
 
 import appdirs
 from google.oauth2 import service_account
-import notify2
-from gi.repository import Gtk as gtk, AppIndicator3 as appindicator
+from gi.repository import Gtk as gtk, AppIndicator3 as appindicator, Notify
 import evdev
 
 from .app.microphone import Microphone
@@ -53,7 +52,7 @@ def display_result(result, notification):
         if notification:
             notification.update(APP_NAME_CAPITALIZED, transcript)
         else:
-            notification = notify2.Notification(APP_NAME_CAPITALIZED, transcript)
+            notification = Notify.Notification.new(APP_NAME_CAPITALIZED, transcript)
         notification.show()
     else:
         notification.update(APP_NAME_CAPITALIZED, transcript)
@@ -83,7 +82,7 @@ def listen_to_microphone(microphone, client):
 
 
 def main():
-    notify2.init(APP_NAME)
+    Notify.init(APP_NAME)
 
     app_dirs = appdirs.AppDirs(APP_NAME)
     config_dir = Path(app_dirs.user_config_dir)
