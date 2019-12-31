@@ -2,7 +2,7 @@
 
 Osprey is a desktop program that runs as a daemon that allows for voice based computer input and usage and is an open source version of [talonvoice](https://talonvoice.com/). It is being initially developed for Linux and Swaywm and uses Google Cloud Speech-to-Text for voice transcription but other platforms and voice engines are welcome to be incorporated.
 
-Osprey is highly configurable with Python, and uses Python scripts to match voice input with computer commands. No commands are included by default, but [osprey-community](https://github.com/osprey-voice/osprey-community) exists as a starting point for some basic commands.
+Osprey is highly configurable with Python, and uses Python scripts to match voice input with computer commands. No commands are included by default, but [osprey-starter-pack](https://github.com/osprey-voice/osprey-starter-pack) exists as a starting point for some basic commands.
 
 For help getting started, check out:
 
@@ -39,12 +39,12 @@ Install using [pipx](https://github.com/pipxproject/pipx) with:
 pipx install --spec git+https://github.com/cjbassi/osprey osprey
 ```
 
-It's also highly recommended to clone the [osprey-community](https://github.com/osprey-voice/osprey-community) repo to the Osprey config directory for some basic voice commands.
+It's also highly recommended to clone the [osprey-starter-pack](https://github.com/osprey-voice/osprey-starter-pack) repo to the Osprey config directory for some basic voice commands.
 
 On Linux do:
 
 ```bash
-git clone https://github.com/osprey-voice/osprey-community ~/.config/osprey/osprey-community
+git clone https://github.com/osprey-voice/osprey-starter-pack ~/.config/osprey/osprey-starter-pack
 ```
 
 ## Usage
