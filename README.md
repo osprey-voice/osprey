@@ -41,6 +41,12 @@ pipx install --spec git+https://github.com/cjbassi/osprey osprey
 
 It's also highly recommended to clone the [osprey-community](https://github.com/osprey-voice/osprey-community) repo to the Osprey config directory for some basic voice commands.
 
+On Linux do:
+
+```bash
+git clone https://github.com/osprey-voice/osprey-community ~/.config/osprey/osprey-community
+```
+
 ## Usage
 
 Run `osprey`, which runs as a daemon.
