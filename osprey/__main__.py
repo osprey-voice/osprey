@@ -29,31 +29,7 @@ APP_NAME_CAPITALIZED = APP_NAME.capitalize()
 SAMPLE_RATE = 16000
 CHUNK_SIZE = SAMPLE_RATE // 10  # 100ms
 
-
-def display_results(results):
-    notification = None
-
-    for result in results:
-        transcript = result.transcript
-
-        if not result.is_final:
-            if notification:
-                notification.update(APP_NAME_CAPITALIZED, transcript)
-            else:
-                notification = notify2.Notification(APP_NAME_CAPITALIZED, transcript)
-            notification.show()
-        else:
-            notification.update(APP_NAME_CAPITALIZED, transcript)
-            notification.show()
-            notification = None
-
-        yield result
-
-
-def filter_final_results(results):
-    for result in results:
-        if result.is_final:
-            yield result
+notification = None
 
 
 def read_scripts(config_dir):
@@ -72,16 +48,28 @@ def compile_regexes():
             context._compile()
 
 
-def match_results(results):
-    for result in results:
-        transcript = result.transcript
+def display_result(result):
+    transcript = result.transcript
+    global notification
 
-        def search():
-            for context_group in context_groups.values():
-                for context in context_group._contexts.values():
-                    if context._match(transcript):
-                        return
-        search()
+    if not result.is_final:
+        if notification:
+            notification.update(APP_NAME_CAPITALIZED, transcript)
+        else:
+            notification = notify2.Notification(APP_NAME_CAPITALIZED, transcript)
+        notification.show()
+    else:
+        notification.update(APP_NAME_CAPITALIZED, transcript)
+        notification.show()
+        notification = None
+
+
+def match_result(result):
+    transcript = result.transcript
+    for context_group in context_groups.values():
+        for context in context_group._contexts.values():
+            if context._match(transcript):
+                return
 
 
 def main():
@@ -108,9 +96,10 @@ def main():
     def listen_to_microphone():
         with microphone as stream:
             results = client.stream_results(stream)
-            results = display_results(results)
-            results = filter_final_results(results)
-            match_results(results)
+            for result in results:
+                display_result(result)
+                if result.is_final:
+                    match_result(result)
 
     thread = threading.Thread(target=listen_to_microphone)
     thread.daemon = True
