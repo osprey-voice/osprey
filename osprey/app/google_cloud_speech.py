@@ -18,6 +18,7 @@ class Client:
             encoding=speech.enums.RecognitionConfig.AudioEncoding.LINEAR16,
             sample_rate_hertz=sample_rate,
             language_code='en-US',
+            model='command_and_search',
         )
         self._streaming_config = speech.types.StreamingRecognitionConfig(
             config=self._config,
