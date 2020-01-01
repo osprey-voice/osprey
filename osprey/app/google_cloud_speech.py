@@ -17,15 +17,17 @@ class Client:
         self._config = speech.types.RecognitionConfig(
             encoding=speech.enums.RecognitionConfig.AudioEncoding.LINEAR16,
             sample_rate_hertz=sample_rate,
-            language_code='en-US')
+            language_code='en-US',
+        )
         self._streaming_config = speech.types.StreamingRecognitionConfig(
             config=self._config,
-            interim_results=True)
+            interim_results=True,
+        )
 
-    def _convert_requests(self, stream):
-        requests = (speech.types.StreamingRecognizeRequest(audio_content=content)
-                    for content in stream)
-        return requests
+    def _create_requests(self, stream):
+        for content in stream:
+            request = speech.types.StreamingRecognizeRequest(audio_content=content)
+            yield request
 
     def _process_responses(self, responses):
         for response in responses:
@@ -48,7 +50,7 @@ class Client:
             yield result._replace(transcript=transcript)
 
     def stream_results(self, stream):
-        requests = self._convert_requests(stream)
+        requests = self._create_requests(stream)
         responses = self._client.streaming_recognize(self._streaming_config, requests)
         results = self._process_responses(responses)
         results = self._convert_results(results)
