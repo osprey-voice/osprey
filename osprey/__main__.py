@@ -17,7 +17,7 @@ from .app.microphone import Microphone
 from .app.google_cloud_speech import Client
 from .app.indicator import Indicator
 from .evdev import KEY_MAP
-from .voice import context_groups
+from .voice import context_groups, preferred_phrases
 from . import homophones
 from . import digits
 
@@ -94,13 +94,13 @@ def main():
         sys.exit("Could not find a credentials file for Google Cloud Speech-to-Text")
     credentials = service_account.Credentials.from_service_account_file(credentials_file_path)
 
-    microphone = Microphone(SAMPLE_RATE, CHUNK_SIZE)
-    client = Client(credentials, SAMPLE_RATE)
-    Indicator(APP_NAME, config_dir, log_file)
-
     sys.path.append(str(config_dir))
     read_scripts(config_dir)
     compile_regexes()
+
+    microphone = Microphone(SAMPLE_RATE, CHUNK_SIZE)
+    client = Client(credentials, SAMPLE_RATE, preferred_phrases)
+    Indicator(APP_NAME, config_dir, log_file)
 
     thread = threading.Thread(target=listen_to_microphone, args=(microphone, client))
     thread.daemon = True

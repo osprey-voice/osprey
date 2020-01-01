@@ -10,7 +10,7 @@ CORRECTIONS = {
 
 
 class Client:
-    def __init__(self, credentials, sample_rate):
+    def __init__(self, credentials, sample_rate, preferred_phrases):
         self._credentials = credentials
         self._sample_rate = sample_rate
         self._client = speech.SpeechClient(credentials=credentials)
@@ -18,6 +18,9 @@ class Client:
             encoding=speech.enums.RecognitionConfig.AudioEncoding.LINEAR16,
             sample_rate_hertz=sample_rate,
             language_code='en-US',
+            speech_contexts=[speech.types.SpeechContext(
+                phrases=list(preferred_phrases),
+            )],
         )
         self._streaming_config = speech.types.StreamingRecognitionConfig(
             config=self._config,

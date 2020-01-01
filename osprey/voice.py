@@ -6,6 +6,8 @@ from .evdev import KEY_MAP
 uinput = evdev.UInput()
 enabled = True
 
+preferred_phrases = set()
+
 
 def enable():
     global enabled
@@ -134,6 +136,8 @@ class Context:
 
     def set_lists(self, lists):
         self._lists = lists
+        for val in lists.values():
+            preferred_phrases.update(set(val))
 
     def _compile(self):
         keymap = _convert_keymap(self._keymap, self._lists)
