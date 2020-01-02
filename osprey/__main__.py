@@ -72,15 +72,20 @@ def match_result(result):
                 return
 
 
+def block_until_ready(gen):
+    first = next(gen)
+    recombined = itertools.chain([first], gen)
+    return recombined
+
+
 def listen_to_microphone(microphone, client, vad):
     notification = None
 
     with microphone as stream:
         while True:
             speech = vad.filter_phrases(stream)
-            first = next(speech)
-            recombined = itertools.chain([first], speech)
-            results = client.stream_results(recombined)
+            speech = block_until_ready(speech)
+            results = client.stream_results(speech)
             for result in results:
                 notification = display_result(result, notification)
                 if result.is_final:
