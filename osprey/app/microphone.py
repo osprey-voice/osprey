@@ -50,27 +50,15 @@ class Microphone:
 
     def __next__(self):
         if not self.open:
-            return StopIteration
+            raise StopIteration
         else:
             # Use a blocking get() to ensure there's at least one chunk of
             # data, and stop iteration if the chunk is None, indicating the
             # end of the audio stream.
             chunk = self._audio_buffer.get()
             if chunk is None:
-                return StopIteration
-            data = [chunk]
-
-            # Now consume whatever other data's still buffered.
-            while True:
-                try:
-                    chunk = self._audio_buffer.get(block=False)
-                    if chunk is None:
-                        return StopIteration
-                    data.append(chunk)
-                except queue.Empty:
-                    break
-
-            return b''.join(data)
+                raise StopIteration
+            return chunk
 
     def _fill_audio_buffer(self, in_data, frame_count, time_info, status_flags):
         """Continuously collect data from the audio stream, into the buffer."""

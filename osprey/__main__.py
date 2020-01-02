@@ -7,6 +7,7 @@ import sys
 import re
 import threading
 import importlib
+import itertools
 
 import appdirs
 from google.oauth2 import service_account
@@ -16,6 +17,7 @@ import evdev
 from .app.microphone import Microphone
 from .app.google_cloud_speech import Client
 from .app.indicator import Indicator
+from .app.vad import VAD
 from .evdev import KEY_MAP
 from .voice import context_groups, preferred_phrases
 from . import homophones
@@ -26,7 +28,7 @@ LOG_FILE_NAME = 'logs.txt'
 APP_NAME = 'osprey'
 APP_NAME_CAPITALIZED = APP_NAME.capitalize()
 SAMPLE_RATE = 16000
-CHUNK_SIZE = SAMPLE_RATE // 10  # 100ms
+CHUNK_SIZE = SAMPLE_RATE // 100  # 10ms
 
 
 def read_scripts(config_dir):
@@ -70,15 +72,19 @@ def match_result(result):
                 return
 
 
-def listen_to_microphone(microphone, client):
+def listen_to_microphone(microphone, client, vad):
     notification = None
 
     with microphone as stream:
-        results = client.stream_results(stream)
-        for result in results:
-            notification = display_result(result, notification)
-            if result.is_final:
-                match_result(result)
+        while True:
+            speech = vad.filter_phrases(stream)
+            first = next(speech)
+            recombined = itertools.chain([first], speech)
+            results = client.stream_results(recombined)
+            for result in results:
+                notification = display_result(result, notification)
+                if result.is_final:
+                    match_result(result)
 
 
 def main():
@@ -101,8 +107,9 @@ def main():
     microphone = Microphone(SAMPLE_RATE, CHUNK_SIZE)
     client = Client(credentials, SAMPLE_RATE, preferred_phrases)
     Indicator(APP_NAME, config_dir, log_file)
+    vad = VAD(SAMPLE_RATE, CHUNK_SIZE)
 
-    thread = threading.Thread(target=listen_to_microphone, args=(microphone, client))
+    thread = threading.Thread(target=listen_to_microphone, args=(microphone, client, vad))
     thread.daemon = True
     thread.start()
 
