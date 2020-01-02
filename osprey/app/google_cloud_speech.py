@@ -3,10 +3,7 @@ from google.cloud import speech
 from .engine import EngineResult
 
 
-CORRECTIONS = {
-    'alt1': 'alt 1',
-    'alt2': 'alt 2',
-}
+CORRECTIONS = {}
 
 
 class Client:
