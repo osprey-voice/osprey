@@ -29,6 +29,9 @@ class Client:
             request = speech.types.StreamingRecognizeRequest(audio_content=content)
             yield request
 
+    def _stream_reponses(self, requests):
+        return self._client.streaming_recognize(self._streaming_config, requests)
+
     def _process_responses(self, responses):
         for response in responses:
             if not response.results:
@@ -51,7 +54,7 @@ class Client:
 
     def stream_results(self, stream):
         requests = self._create_requests(stream)
-        responses = self._client.streaming_recognize(self._streaming_config, requests)
+        responses = self._stream_reponses(requests)
         results = self._process_responses(responses)
         results = self._convert_results(results)
         results = self._correct_transcript(results)
