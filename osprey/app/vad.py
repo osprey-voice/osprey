@@ -8,13 +8,13 @@ import webrtcvad
 class VAD:
     """Filters out non-voiced audio frames.
 
-    Given a webrtcvad.Vad and a source of audio frames, yields only
+    Given a source of audio frames, yields only
     the voiced audio.
 
     Uses a padded, sliding window algorithm over the audio frames.
-    When more than 90% of the frames in the window are voiced (as
+    When more than a threshold of the frames in the window are voiced (as
     reported by the VAD), the collector triggers and begins yielding
-    audio frames. Then the collector waits until 90% of the frames in
+    audio frames. Then the collector waits until a threshold of the frames in
     the window are unvoiced to detrigger.
 
     The window is padded at the front and back to provide a small
@@ -26,7 +26,6 @@ class VAD:
     sample_rate - The audio sample rate, in Hz.
     frame_duration_ms - The frame duration in milliseconds.
     padding_duration_ms - The amount to pad the window, in milliseconds.
-    vad - An instance of webrtcvad.Vad.
     frames - a source of audio frames (sequence or generator).
 
     Returns: A generator that yields PCM audio data.
@@ -55,7 +54,7 @@ class VAD:
             if not triggered:
                 ring_buffer.append((frame, is_speech))
                 num_voiced = len([f for f, speech in ring_buffer if speech])
-                # If we're NOTTRIGGERED and more than 90% of the frames in
+                # If we're NOTTRIGGERED and more than a threshold of the frames in
                 # the ring buffer are voiced frames, then enter the
                 # TRIGGERED state.
                 if num_voiced > self._voiced_threshold * ring_buffer.maxlen:
@@ -72,8 +71,7 @@ class VAD:
                 yield frame
                 ring_buffer.append((frame, is_speech))
                 num_unvoiced = len([f for f, speech in ring_buffer if not speech])
-                # If more than 90% of the frames in the ring buffer are
-                # unvoiced, then enter NOTTRIGGERED and yield whatever
-                # audio we've collected.
+                # If more than a threshold of the frames in the ring buffer are
+                # unvoiced, then enter NOTTRIGGERED and return.
                 if num_unvoiced > self._unvoiced_threshold * ring_buffer.maxlen:
                     return
