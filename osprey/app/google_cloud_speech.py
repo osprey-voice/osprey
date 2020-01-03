@@ -7,21 +7,21 @@ CORRECTIONS = {}
 
 
 class Client:
-    def __init__(self, credentials, sample_rate, preferred_phrases):
+    def __init__(self, credentials, sample_rate, audio_encoding, preferred_phrases, interim_results, language_code):
         self._credentials = credentials
         self._sample_rate = sample_rate
         self._client = speech.SpeechClient(credentials=credentials)
         self._config = speech.types.RecognitionConfig(
-            encoding=speech.enums.RecognitionConfig.AudioEncoding.LINEAR16,
+            encoding=audio_encoding,
             sample_rate_hertz=sample_rate,
-            language_code='en-US',
+            language_code=language_code,
             speech_contexts=[speech.types.SpeechContext(
                 phrases=list(preferred_phrases),
             )],
         )
         self._streaming_config = speech.types.StreamingRecognitionConfig(
             config=self._config,
-            interim_results=True,
+            interim_results=interim_results,
         )
 
     def _create_requests(self, stream):

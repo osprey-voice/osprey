@@ -6,9 +6,11 @@ import pyaudio
 class Microphone:
     """Opens a recording stream as a generator yielding the audio chunks."""
 
-    def __init__(self, sample_rate, chunk_size):
+    def __init__(self, sample_rate, chunk_size, audio_format, audio_channels):
         self._sample_rate = sample_rate
         self._chunk_size = chunk_size
+        self._audio_format = audio_format
+        self._audio_channels = audio_channels
 
         self._audio_buffer = queue.Queue()
         self._audio_interface = None
@@ -19,10 +21,8 @@ class Microphone:
     def __enter__(self):
         self._audio_interface = pyaudio.PyAudio()
         self._audio_stream = self._audio_interface.open(
-            format=pyaudio.paInt16,
-            # The API currently only supports 1-channel (mono) audio
-            # https://goo.gl/z757pE
-            channels=1,
+            format=self._audio_format,
+            channels=self._audio_channels,
             rate=self._sample_rate,
             input=True,
             frames_per_buffer=self._chunk_size,

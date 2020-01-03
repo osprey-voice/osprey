@@ -32,12 +32,14 @@ class VAD:
     Returns: A generator that yields PCM audio data.
     """
 
-    def __init__(self, sample_rate, chunk_size):
+    def __init__(self, sample_rate, chunk_size, threshold_level, padding_duration_ms, voiced_threshold, unvoiced_threshold):
         self._sample_rate = sample_rate
         self._frame_duration_ms = chunk_size
+        self._voiced_threshold = voiced_threshold
+        self._unvoiced_threshold = unvoiced_threshold
 
-        self._webrtcvad = webrtcvad.Vad(3)
-        self._padding_duration_ms = 2000
+        self._webrtcvad = webrtcvad.Vad(threshold_level)
+        self._padding_duration_ms = padding_duration_ms
         self._num_padding_frames = self._padding_duration_ms // self._frame_duration_ms
 
     def filter_phrases(self, frames):
@@ -56,7 +58,7 @@ class VAD:
                 # If we're NOTTRIGGERED and more than 90% of the frames in
                 # the ring buffer are voiced frames, then enter the
                 # TRIGGERED state.
-                if num_voiced > 0.9 * ring_buffer.maxlen:
+                if num_voiced > self._voiced_threshold * ring_buffer.maxlen:
                     triggered = True
                     # We want to yield all the audio we see from now until
                     # we are NOTTRIGGERED, but we have to start with the
@@ -73,5 +75,5 @@ class VAD:
                 # If more than 90% of the frames in the ring buffer are
                 # unvoiced, then enter NOTTRIGGERED and yield whatever
                 # audio we've collected.
-                if num_unvoiced > 0.9 * ring_buffer.maxlen:
+                if num_unvoiced > self._unvoiced_threshold * ring_buffer.maxlen:
                     return

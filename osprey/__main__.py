@@ -13,6 +13,8 @@ import appdirs
 from google.oauth2 import service_account
 from gi.repository import Gtk as gtk, AppIndicator3 as appindicator, Notify
 import evdev
+import pyaudio
+from google.cloud import speech
 
 from .app.microphone import Microphone
 from .app.google_cloud_speech import Client
@@ -23,12 +25,26 @@ from .voice import context_groups, preferred_phrases
 from . import homophones
 from . import digits
 
-CREDENTIALS_FILE_NAME = 'credentials.json'
-LOG_FILE_NAME = 'logs.txt'
 APP_NAME = 'osprey'
 APP_NAME_CAPITALIZED = APP_NAME.capitalize()
+
+LOG_FILE_NAME = 'logs.txt'
+CREDENTIALS_FILE_NAME = 'credentials.json'
+
 SAMPLE_RATE = 16000
 CHUNK_SIZE = SAMPLE_RATE // 100  # 10ms
+PADDING_DURATION_MS = 2000
+VOICED_THRESHOLD = .9
+UNVOICED_THRESHOLD = .9
+AUDIO_FORMAT = pyaudio.paInt16
+# The API currently only supports 1-channel (mono) audio
+# https://goo.gl/z757pE
+AUDIO_CHANNELS = 1
+AUDIO_ENCODING = speech.enums.RecognitionConfig.AudioEncoding.LINEAR16
+
+INTERIM_RESULTS = True
+LANGUAGE_CODE = 'en-US'
+THRESHOLD_LEVEL = 3
 
 
 def read_scripts(config_dir):
@@ -117,10 +133,11 @@ def main():
     read_scripts(config_dir)
     compile_regexes()
 
-    microphone = Microphone(SAMPLE_RATE, CHUNK_SIZE)
-    client = Client(credentials, SAMPLE_RATE, preferred_phrases)
+    microphone = Microphone(SAMPLE_RATE, CHUNK_SIZE, AUDIO_FORMAT, AUDIO_CHANNELS)
+    client = Client(credentials, SAMPLE_RATE, AUDIO_ENCODING,
+                    preferred_phrases, INTERIM_RESULTS, LANGUAGE_CODE)
     Indicator(APP_NAME, config_dir, log_file)
-    vad = VAD(SAMPLE_RATE, CHUNK_SIZE)
+    vad = VAD(SAMPLE_RATE, CHUNK_SIZE, THRESHOLD_LEVEL, VOICED_THRESHOLD, UNVOICED_THRESHOLD)
 
     thread = threading.Thread(target=listen_to_microphone, args=(microphone, client, vad))
     thread.daemon = True
