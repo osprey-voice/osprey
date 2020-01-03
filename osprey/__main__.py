@@ -137,7 +137,8 @@ def main():
     client = Client(credentials, SAMPLE_RATE, AUDIO_ENCODING,
                     preferred_phrases, INTERIM_RESULTS, LANGUAGE_CODE)
     Indicator(APP_NAME, config_dir, log_file)
-    vad = VAD(SAMPLE_RATE, CHUNK_SIZE, THRESHOLD_LEVEL, VOICED_THRESHOLD, UNVOICED_THRESHOLD)
+    vad = VAD(SAMPLE_RATE, CHUNK_SIZE, THRESHOLD_LEVEL,
+              PADDING_DURATION_MS, VOICED_THRESHOLD, UNVOICED_THRESHOLD)
 
     thread = threading.Thread(target=listen_to_microphone, args=(microphone, client, vad))
     thread.daemon = True
