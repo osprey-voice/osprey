@@ -3,7 +3,11 @@ from google.cloud import speech
 from .engine import EngineResult
 
 
-CORRECTIONS = {}
+CORRECTIONS = {
+    'Plex': 'plex',
+    'Sun': 'sun',
+    'Alt': 'alt',
+}
 
 
 class Client:
