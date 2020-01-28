@@ -106,9 +106,10 @@ def listen_to_microphone(microphone, client, vad):
 
     with microphone as stream:
         while True:
-            speech = vad.filter_phrases(stream)
-            speech = block_until_ready(speech)
-            results = client.stream_results(speech)
+            # speech = vad.filter_phrases(stream)
+            # speech = block_until_ready(speech)
+            # results = client.stream_results(speech)
+            results = client.stream_results(stream)
             for result in results:
                 result = correct_digit_words(result)
                 notification = display_result(result, notification)
