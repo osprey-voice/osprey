@@ -73,7 +73,7 @@ def display_result(result, notification):
             notification = Notify.Notification.new(APP_NAME_CAPITALIZED, transcript)
         notification.show()
     else:
-        notification.update(APP_NAME_CAPITALIZED, transcript)
+        notification.update(f'{APP_NAME_CAPITALIZED} [FINAL]', transcript)
         notification.show()
         notification = None
 
