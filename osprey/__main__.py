@@ -94,13 +94,6 @@ def block_until_ready(gen):
     return recombined
 
 
-def correct_digit_words(result):
-    transcript = result.transcript
-    for key, val in digits.WORDS_TO_DIGITS.items():
-        transcript = transcript.replace(key, str(val))
-    return result._replace(transcript=transcript)
-
-
 def listen_to_microphone(microphone, client, vad):
     notification = None
 
@@ -111,7 +104,6 @@ def listen_to_microphone(microphone, client, vad):
             # results = client.stream_results(speech)
             results = client.stream_results(stream)
             for result in results:
-                result = correct_digit_words(result)
                 notification = display_result(result, notification)
                 if result.is_final:
                     match_result(result)
