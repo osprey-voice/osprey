@@ -37,7 +37,7 @@ def press(key_string):
             uinput.write(evdev.ecodes.EV_KEY, KEY_MAP[key][1], 1)
         else:
             uinput.write(evdev.ecodes.EV_KEY, KEY_MAP[key], 1)
-    for key in keys[::-1]:  # reverses list
+    for key in keys[::-1]:  # `[::-1]` reverses list
         if isinstance(KEY_MAP[key], list):
             uinput.write(evdev.ecodes.EV_KEY, KEY_MAP[key][1], 0)
             uinput.write(evdev.ecodes.EV_KEY, KEY_MAP[key][0], 0)
@@ -93,7 +93,19 @@ def _convert_keymap(keymap, lists):
         return rule.format(**named_regexes)
 
     def convert_match(match, lists):
-        return {key: match.group(key).strip().split(' ') for key in lists if key in match.groupdict() and match.group(key)}
+        converted_match = {}
+        for name in lists:
+            if name in match.groupdict() and match.group(name) != '':
+                matches = []
+                tokens = match.group(name).strip().split(' ')[::-1]  # `[::-1]` reverses list
+                cur = ""
+                while len(tokens) != 0:
+                    cur = tokens.pop() if cur == "" else cur + " " + tokens.pop()
+                    if cur in lists[name]:
+                        matches.append(cur)
+                        cur = ""
+                converted_match[name] = matches
+        return converted_match
 
     converted = {}
     for key, val in keymap.items():
