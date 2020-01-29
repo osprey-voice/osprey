@@ -7,6 +7,13 @@ CORRECTIONS = {
     'Plex': 'plex',
     'Sun': 'sun',
     'Alt': 'alt',
+    'Escape': 'escape',
+    'Square': 'square',
+    'Shift': 'shift',
+    'Amper': 'amper',
+    'R': 'r',
+    'L': 'l',
+    'Bang': 'bang',
 }
 
 
