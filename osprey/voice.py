@@ -30,21 +30,19 @@ def is_enabled():
 
 
 def press(key_string):
-    key_combinations = key_string.split(' ')
-    for key_combination in key_combinations:
-        keys = key_combination.split('-')
-        for key in keys:
-            if isinstance(KEY_MAP[key], list):
-                uinput.write(evdev.ecodes.EV_KEY, KEY_MAP[key][0], 1)
-                uinput.write(evdev.ecodes.EV_KEY, KEY_MAP[key][1], 1)
-            else:
-                uinput.write(evdev.ecodes.EV_KEY, KEY_MAP[key], 1)
-        for key in keys[::-1]:  # reverses list
-            if isinstance(KEY_MAP[key], list):
-                uinput.write(evdev.ecodes.EV_KEY, KEY_MAP[key][1], 0)
-                uinput.write(evdev.ecodes.EV_KEY, KEY_MAP[key][0], 0)
-            else:
-                uinput.write(evdev.ecodes.EV_KEY, KEY_MAP[key], 0)
+    keys = key_string.split(' ')
+    for key in keys:
+        if isinstance(KEY_MAP[key], list):
+            uinput.write(evdev.ecodes.EV_KEY, KEY_MAP[key][0], 1)
+            uinput.write(evdev.ecodes.EV_KEY, KEY_MAP[key][1], 1)
+        else:
+            uinput.write(evdev.ecodes.EV_KEY, KEY_MAP[key], 1)
+    for key in keys[::-1]:  # reverses list
+        if isinstance(KEY_MAP[key], list):
+            uinput.write(evdev.ecodes.EV_KEY, KEY_MAP[key][1], 0)
+            uinput.write(evdev.ecodes.EV_KEY, KEY_MAP[key][0], 0)
+        else:
+            uinput.write(evdev.ecodes.EV_KEY, KEY_MAP[key], 0)
     uinput.syn()
 
 
