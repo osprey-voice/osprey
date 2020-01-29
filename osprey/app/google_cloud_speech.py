@@ -14,6 +14,7 @@ CORRECTIONS = {
     'R': 'r',
     'L': 'l',
     'Bang': 'bang',
+    'Dash': 'dash',
 }
 
 
