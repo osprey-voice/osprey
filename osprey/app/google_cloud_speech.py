@@ -9,10 +9,9 @@ CORRECTIONS = {
     'Alt': 'alt',
     'Escape': 'escape',
     'Square': 'square',
-    'Shift': 'shift',
     'Amper': 'amper',
-    'R': 'r',
     'L': 'l',
+    'R': 'r',
     'Bang': 'bang',
     'Dash': 'dash',
 }
