@@ -34,7 +34,7 @@ MISC = [
     'PageDown',
     'Home',
     'End',
-    'Esc',
+    'Escape',
 ]
 
 FUNCTION = [
