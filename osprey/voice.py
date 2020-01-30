@@ -172,10 +172,11 @@ class Context:
         for string, callback in keymap.items():
             self._regexes[re.compile(string)] = callback
 
-    def _match(self, input):
+    def _match(self, transcript):
         for regex, callback in self._regexes.items():
-            match = regex.fullmatch(input)
+            match = regex.match(transcript)
             if match:
                 callback(match)
-                return True
-        return False
+                transcript = transcript.replace(match[0], '').strip()
+                return (True, transcript)
+        return (False, transcript)

@@ -81,11 +81,22 @@ def display_result(result, notification):
 
 
 def match_result(result):
+    def search(transcript):
+        for context_group in context_groups.values():
+            for context in context_group._contexts.values():
+                matched, transcript = context._match(transcript)
+                if matched:
+                    return (True, transcript)
+        return (False, transcript)
+
     transcript = result.transcript
-    for context_group in context_groups.values():
-        for context in context_group._contexts.values():
-            if context._match(transcript):
-                return
+    while True:
+        matched, transcript = search(transcript)
+        if transcript == '':
+            return
+        if matched:
+            continue
+        return
 
 
 def block_until_ready(gen):
