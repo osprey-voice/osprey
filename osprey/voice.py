@@ -56,7 +56,7 @@ def insert(custom_string):
     for char in custom_string:
         if char == ' ':
             press('Space')
-        if char == '\t':
+        elif char == '\t':
             press('Tab')
         else:
             press(char)
@@ -99,7 +99,8 @@ def _convert_keymap(keymap, lists):
     quantified_regexes = {f'{key}{quantifier}': rf'{val}{quantifier}' for key,
                           val in regexes.items() for quantifier in quantifiers}
     regexes.update(quantified_regexes)
-    regexes.update({'word': r'(\w+)'})
+    regexes.update({'word': r'\w+'})
+    regexes.update({'phrase': r'\w+(\s\w+)*'})
     named_regexes = {key: named_regex(
         key[:-1] if key[-1] in quantifiers else key, val) for key, val in regexes.items()}
 
