@@ -23,7 +23,7 @@ from .app.vad import VAD
 from .evdev import KEY_MAP
 from .voice import context_groups, preferred_phrases
 from . import homophones
-from . import digits
+from . import conversions
 
 APP_NAME = 'osprey'
 APP_NAME_CAPITALIZED = APP_NAME.capitalize()
