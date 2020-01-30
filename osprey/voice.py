@@ -99,6 +99,7 @@ def _convert_keymap(keymap, lists):
     quantified_regexes = {f'{key}{quantifier}': rf'{val}{quantifier}' for key,
                           val in regexes.items() for quantifier in quantifiers}
     regexes.update(quantified_regexes)
+    regexes.update({'word': r'(\w+)'})
     named_regexes = {key: named_regex(
         key[:-1] if key[-1] in quantifiers else key, val) for key, val in regexes.items()}
 
@@ -107,17 +108,20 @@ def _convert_keymap(keymap, lists):
 
     def convert_match(match, lists):
         converted_match = {}
-        for name in lists:
-            if name in match.groupdict() and match.group(name) != '':
-                matches = []
-                tokens = match.group(name).strip().split(' ')[::-1]  # `[::-1]` reverses list
-                cur = ""
-                while len(tokens) != 0:
-                    cur = tokens.pop() if cur == "" else cur + " " + tokens.pop()
-                    if cur in lists[name]:
-                        matches.append(cur)
-                        cur = ""
-                converted_match[name] = matches
+        for name, val in match.groupdict().items():
+            if val != '':
+                if name in lists:
+                    matches = []
+                    tokens = val.strip().split(' ')[::-1]  # `[::-1]` reverses list
+                    cur = ""
+                    while len(tokens) != 0:
+                        cur = tokens.pop() if cur == "" else cur + " " + tokens.pop()
+                        if cur in lists[name]:
+                            matches.append(cur)
+                            cur = ""
+                    converted_match[name] = matches
+                else:
+                    converted_match[name] = [val]
         return converted_match
 
     converted = {}
