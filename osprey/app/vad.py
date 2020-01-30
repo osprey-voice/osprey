@@ -5,7 +5,7 @@ import collections
 import webrtcvad
 
 
-class VAD:
+class Vad:
     """Filters out non-voiced audio frames.
 
     Given a source of audio frames, yields only
