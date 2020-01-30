@@ -1,12 +1,15 @@
-import evdev
 import re
+from typing import Set, Optional, Callable
+
+import evdev
 
 from .evdev import KEY_MAP
 
 uinput = evdev.UInput()
-enabled = True
 
-preferred_phrases = set()
+enabled = True
+preferred_phrases: Set[str] = set()
+last_command: Optional[Callable[[], None]] = None
 
 
 def enable():
@@ -45,6 +48,9 @@ def press(key_string):
             uinput.write(evdev.ecodes.EV_KEY, KEY_MAP[key], 0)
     uinput.syn()
 
+    global last_command
+    last_command = lambda: press(key_string)  # noqa
+
 
 def insert(custom_string):
     for char in custom_string:
@@ -54,10 +60,15 @@ def insert(custom_string):
             press('Tab')
         else:
             press(char)
+    global last_command
+    last_command = lambda: insert(custom_string)  # noqa
 
 
-def repeate(count):
-    pass
+def repeat(count):
+    global last_command
+    if last_command:
+        for _i in range(count - 1):
+            last_command()
 
 
 context_groups = {}
@@ -87,7 +98,9 @@ def _convert_keymap(keymap, lists):
     regexes = {key: list_to_regex(val) for key, val in lists.items()}
     quantified_regexes = {f'{key}{quantifier}': rf'{val}{quantifier}' for key,
                           val in regexes.items() for quantifier in quantifiers}
-    named_regexes = {key: named_regex(key[:-1], val) for key, val in quantified_regexes.items()}
+    regexes.update(quantified_regexes)
+    named_regexes = {key: named_regex(
+        key[:-1] if key[-1] in quantifiers else key, val) for key, val in regexes.items()}
 
     def convert_rule(rule):
         return rule.format(**named_regexes)
