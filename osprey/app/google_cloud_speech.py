@@ -3,20 +3,6 @@ from google.cloud import speech
 from .engine import EngineResult
 
 
-CORRECTIONS = {
-    'Plex': 'plex',
-    'Sun': 'sun',
-    'Alt': 'alt',
-    'Escape': 'escape',
-    'Square': 'square',
-    'Amper': 'amper',
-    'L': 'l',
-    'R': 'r',
-    'Bang': 'bang',
-    'Dash': 'dash',
-}
-
-
 class Client:
     def __init__(self, credentials, sample_rate, audio_encoding, preferred_phrases, interim_results, language_code):
         self._credentials = credentials
@@ -56,17 +42,14 @@ class Client:
         for result in results:
             yield EngineResult(result.is_final, result.alternatives[0].transcript.strip())
 
-    def _correct_transcript(self, results):
+    def _lowercase_transcript(self, results):
         for result in results:
-            transcript = result.transcript
-            for key, val in CORRECTIONS.items():
-                transcript = transcript.replace(key, val)
-            yield result._replace(transcript=transcript)
+            yield result._replace(transcript=result.transcript.lower())
 
     def stream_results(self, stream):
         requests = self._create_requests(stream)
         responses = self._stream_reponses(requests)
         results = self._process_responses(responses)
         results = self._convert_results(results)
-        results = self._correct_transcript(results)
+        results = self._lowercase_transcript(results)
         return results
