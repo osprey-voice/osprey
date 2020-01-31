@@ -86,7 +86,7 @@ class ContextGroup:
 default_context_group = ContextGroup('default')
 
 
-def _convert_keymap(keymap, lists):
+def _convert_rules(rules, lists):
     def named_regex(name, regex):
         return r'(?P<{}>{})'.format(name, regex)
 
@@ -126,7 +126,7 @@ def _convert_keymap(keymap, lists):
         return converted_match
 
     converted = {}
-    for key, val in keymap.items():
+    for key, val in rules.items():
         # `val=val` used to fix late binding
         # https://stackoverflow.com/questions/3431676/creating-functions-in-a-loop
         def callback(m, val=val):
@@ -153,14 +153,14 @@ class Context:
         self._func = func
         self._group = group
 
-        self._keymap = {}
+        self._rules = {}
         self._regexes = {}
         self._lists = {}
 
         group._contexts[name] = self
 
-    def set_keymap(self, keymap):
-        self._keymap = keymap
+    def set_rules(self, rules):
+        self._rules = rules
 
     def set_lists(self, lists):
         self._lists = lists
@@ -168,8 +168,8 @@ class Context:
             preferred_phrases.update(set(val))
 
     def _compile(self):
-        keymap = _convert_keymap(self._keymap, self._lists)
-        for string, callback in keymap.items():
+        rules = _convert_rules(self._rules, self._lists)
+        for string, callback in rules.items():
             self._regexes[re.compile(string)] = callback
 
     def _match(self, transcript):
