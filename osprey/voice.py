@@ -67,7 +67,7 @@ def insert(custom_string):
 def repeat(count):
     global last_command
     if last_command:
-        for _i in range(count - 1):
+        for _i in range(count):
             last_command()
 
 
