@@ -99,8 +99,8 @@ def _convert_rules(rules, lists):
     quantified_regexes = {f'{key}{quantifier}': rf'{val}{quantifier}' for key,
                           val in regexes.items() for quantifier in quantifiers}
     regexes.update(quantified_regexes)
-    regexes.update({'word': r'\w+'})
-    regexes.update({'phrase': r'\w+(\s\w+)*'})
+    regexes.update({'word': r'\S+'})
+    regexes.update({'phrase': r'\S+(\s\S+)*'})
     named_regexes = {key: named_regex(
         key[:-1] if key[-1] in quantifiers else key, val) for key, val in regexes.items()}
 
