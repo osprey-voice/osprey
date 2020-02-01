@@ -161,6 +161,10 @@ class Context:
 
     def set_rules(self, rules):
         self._rules = rules
+        for rule in rules:
+            for word in rule.split(' '):
+                if '{' not in word:
+                    preferred_phrases.add(word)
 
     def set_lists(self, lists):
         self._lists = lists
