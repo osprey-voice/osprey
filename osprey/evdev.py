@@ -54,7 +54,7 @@ MISC = {
 }
 
 KEY_MAP.update({key: key for key in KEYS})
-KEY_MAP.update({key: ['Shift', key.lower()] for key in KEYS if key in string.ascii_uppercase})
+KEY_MAP.update({key: ['Shift', key.lower()] for key in string.ascii_uppercase})
 KEY_MAP.update(PUNCTUATION)
 KEY_MAP.update(MODIFIERS)
 KEY_MAP.update(MISC)
