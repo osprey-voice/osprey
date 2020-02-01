@@ -163,6 +163,7 @@ class Context:
         self._rules = rules
         for rule in rules:
             for word in rule.split(' '):
+                # TODO: may need handle more cases
                 if '{' not in word:
                     preferred_phrases.add(word)
 
