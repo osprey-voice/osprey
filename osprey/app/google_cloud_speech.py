@@ -42,14 +42,9 @@ class Client:
         for result in results:
             yield EngineResult(result.is_final, result.alternatives[0].transcript.strip())
 
-    def _lowercase_transcript(self, results):
-        for result in results:
-            yield result._replace(transcript=result.transcript.lower())
-
     def stream_results(self, stream):
         requests = self._create_requests(stream)
         responses = self._stream_reponses(requests)
         results = self._process_responses(responses)
         results = self._convert_results(results)
-        results = self._lowercase_transcript(results)
         return results

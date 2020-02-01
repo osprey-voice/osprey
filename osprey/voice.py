@@ -117,7 +117,7 @@ def _convert_rules(rules, lists):
                     cur = ""
                     while len(tokens) != 0:
                         cur = tokens.pop() if cur == "" else cur + " " + tokens.pop()
-                        if cur in lists[name]:
+                        if cur.lower() in lists[name]:
                             matches.append(cur)
                             cur = ""
                     converted_match[name] = matches
@@ -175,7 +175,7 @@ class Context:
     def _compile(self):
         rules = _convert_rules(self._rules, self._lists)
         for string, callback in rules.items():
-            self._regexes[re.compile(string)] = callback
+            self._regexes[re.compile(string, re.IGNORECASE)] = callback
 
     def _match(self, transcript):
         for regex, callback in self._regexes.items():
