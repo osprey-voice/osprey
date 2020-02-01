@@ -22,7 +22,6 @@ from .app.indicator import Indicator
 from .app.vad import Vad
 from .evdev import KEY_MAP
 from .voice import context_groups, preferred_phrases
-from . import homophones
 from . import conversions
 
 APP_NAME = 'osprey'
