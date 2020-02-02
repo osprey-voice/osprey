@@ -1,5 +1,7 @@
 # Osprey
 
+[![Matrix](https://img.shields.io/matrix/osprey:matrix.org)](https://matrix.to/#/#osprey:matrix.org)
+
 Osprey is a desktop program that runs as a daemon that allows for voice based computer input and usage and is an open source version of [talonvoice](https://talonvoice.com/). It can be used for coding, commanding, and dictating to a computer in a highly efficient manner. It is being initially developed for Linux and Swaywm and uses Google Cloud Speech-to-Text for voice transcription but other platforms and voice engines are welcome to be incorporated.
 
 Osprey works by converting microphone audio to voice transcriptions using a speech-to-text engine, then matching the transcriptions to user specified commands and keyboard input. It is highly configurable with Python, and uses Python scripts to match voice transcriptions with computer commands using the APIs provided by Osprey. No commands are included by default, but a starter pack of Osprey scripts exists at [osprey-starter-pack](https://github.com/osprey-voice/osprey-starter-pack).
@@ -10,6 +12,7 @@ For help getting started, check out:
 - [Talon Voice Control: basics](https://www.youtube.com/watch?v=oB5TGMEhQp4&feature=youtu.be)
 - [The Osprey wiki](https://github.com/osprey-voice/osprey/wiki)
 - [Perl Out Loud](https://www.youtube.com/watch?v=Mz3JeYfBTcY)
+- [The Matrix room](https://matrix.to/#/#osprey:matrix.org)
 
 ## Requirements
 
