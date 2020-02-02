@@ -6,13 +6,16 @@ Osprey is a desktop program that runs as a daemon that allows for voice based co
 
 Osprey works by converting microphone audio to voice transcriptions using a speech-to-text engine, then matching the transcriptions to user specified commands and keyboard input. It is highly configurable with Python, and uses Python scripts to match voice transcriptions with computer commands using the APIs provided by Osprey. No commands are included by default, but a starter pack of Osprey scripts exists at [osprey-starter-pack](https://github.com/osprey-voice/osprey-starter-pack).
 
-For help getting started, check out:
+Official resources:
+
+- [The Osprey wiki](https://github.com/osprey-voice/osprey/wiki)
+- [The Osprey Matrix room](https://matrix.to/#/#osprey:matrix.org)
+
+Other great resources for help getting started:
 
 - [Getting Started with Voice Driven Development](https://whalequench.club/blog/2019/09/03/learning-to-speak-code.html)
 - [Talon Voice Control: basics](https://www.youtube.com/watch?v=oB5TGMEhQp4&feature=youtu.be)
-- [The Osprey wiki](https://github.com/osprey-voice/osprey/wiki)
 - [Perl Out Loud](https://www.youtube.com/watch?v=Mz3JeYfBTcY)
-- [The Matrix room](https://matrix.to/#/#osprey:matrix.org)
 
 ## Requirements
 
