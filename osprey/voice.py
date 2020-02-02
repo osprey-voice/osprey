@@ -1,5 +1,6 @@
 import re
 from typing import Set, Optional, Callable
+import time
 
 import evdev
 
@@ -60,6 +61,7 @@ def insert(custom_string):
             press('Tab')
         else:
             press(char)
+        time.sleep(.001)  # needed otherwise evdev will reject some input
     global last_command
     last_command = lambda: insert(custom_string)  # noqa
 
