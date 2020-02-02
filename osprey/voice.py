@@ -166,8 +166,6 @@ class Context:
 
     def set_lists(self, lists):
         self._lists = lists
-        for val in lists.values():
-            preferred_phrases.update(set(val))
 
     def _compile(self):
         rules = _convert_rules(self._rules, self._lists)
