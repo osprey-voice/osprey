@@ -1,6 +1,7 @@
 from google.cloud import speech
 
 from .engine import EngineResult
+from ..conversions import ORDINALS, WORDS_TO_DIGITS
 
 
 class Client:
@@ -42,9 +43,19 @@ class Client:
         for result in results:
             yield EngineResult(result.is_final, result.alternatives[0].transcript.strip())
 
+    def _correct_transcripts(self, results):
+        for result in results:
+            transcript = result.transcript
+            for word, ordinal in ORDINALS.items():
+                transcript = transcript.replace(word, ordinal)
+            for word, digit in WORDS_TO_DIGITS.items():
+                transcript = transcript.replace(word, digit)
+            yield result._replace(transcript=transcript)
+
     def stream_results(self, stream):
         requests = self._create_requests(stream)
         responses = self._stream_reponses(requests)
         results = self._process_responses(responses)
         results = self._convert_results(results)
+        results = self._correct_transcripts(results)
         return results
