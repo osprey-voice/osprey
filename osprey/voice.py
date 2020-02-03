@@ -106,7 +106,7 @@ def _convert_rules(rules, lists, regexes):
         key[:-1] if key[-1] in quantifiers else key, val) for key, val in converted_regexes.items()}
 
     def convert_rule(rule):
-        return rule.format(**named_regexes)
+        return rule.format_map(named_regexes)
 
     def convert_match(match, lists):
         converted_match = {}
