@@ -71,6 +71,7 @@ def repeat(count):
     if last_command:
         for _i in range(count):
             last_command()
+            time.sleep(.001)  # needed otherwise evdev will reject some input
 
 
 context_groups = {}
