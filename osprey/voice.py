@@ -81,9 +81,16 @@ class ContextGroup:
     def __init__(self, name):
         self._name = name
 
+        self._enabled = True
         self._contexts = {}
 
         context_groups[name] = self
+
+    def enable(self):
+        self._enabled = True
+
+    def disable(self):
+        self._enabled = False
 
 
 default_context_group = ContextGroup('default')
