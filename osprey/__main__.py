@@ -8,6 +8,7 @@ import re
 import threading
 import importlib
 import itertools
+import time
 
 import appdirs
 from google.oauth2 import service_account
@@ -96,6 +97,8 @@ def match_result(result):
         if transcript == '':
             return
         if matched:
+            # needed since some applications can't process keybinds fast enough
+            time.sleep(.01)
             continue
         return
 

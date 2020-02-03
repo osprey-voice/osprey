@@ -40,7 +40,8 @@ def insert(custom_string):
             press('Tab')
         else:
             press(char)
-        time.sleep(.001)  # needed otherwise evdev will reject some input
+        # needed otherwise evdev will reject some input
+        time.sleep(.001)
     global last_command
     last_command = lambda: insert(custom_string)  # noqa
 
@@ -50,7 +51,8 @@ def repeat(count):
     if last_command:
         for _i in range(count):
             last_command()
-            time.sleep(.001)  # needed otherwise evdev will reject some input
+            # needed otherwise evdev will reject some input
+            time.sleep(.001)
 
 
 context_groups = {}
