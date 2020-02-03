@@ -88,7 +88,7 @@ class ContextGroup:
 default_context_group = ContextGroup('default')
 
 
-def _convert_rules(rules, lists):
+def _convert_rules(rules, lists, regexes):
     def named_regex(name, regex):
         return r'(?P<{}>{})'.format(name, regex)
 
@@ -97,14 +97,13 @@ def _convert_rules(rules, lists):
 
     quantifiers = ['*', '+']
 
-    regexes = {key: list_to_regex(val) for key, val in lists.items()}
+    converted_regexes = {key: list_to_regex(val) for key, val in lists.items()}
     quantified_regexes = {f'{key}{quantifier}': rf'{val}{quantifier}' for key,
-                          val in regexes.items() for quantifier in quantifiers}
-    regexes.update(quantified_regexes)
-    regexes.update({'word': r'\S+'})
-    regexes.update({'phrase': r'\S+(\s\S+)*'})
+                          val in converted_regexes.items() for quantifier in quantifiers}
+    converted_regexes.update(quantified_regexes)
+    converted_regexes.update(regexes)
     named_regexes = {key: named_regex(
-        key[:-1] if key[-1] in quantifiers else key, val) for key, val in regexes.items()}
+        key[:-1] if key[-1] in quantifiers else key, val) for key, val in converted_regexes.items()}
 
     def convert_rule(rule):
         return rule.format(**named_regexes)
@@ -156,8 +155,9 @@ class Context:
         self._group = group
 
         self._rules = {}
-        self._regexes = {}
+        self._converted_rules = {}
         self._lists = {}
+        self._regexes = {}
 
         group._contexts[name] = self
 
@@ -167,13 +167,16 @@ class Context:
     def set_lists(self, lists):
         self._lists = lists
 
+    def set_regexes(self, regexes):
+        self._regexes = regexes
+
     def _compile(self):
-        rules = _convert_rules(self._rules, self._lists)
-        for string, callback in rules.items():
-            self._regexes[re.compile(string, re.IGNORECASE)] = callback
+        converted_rules = _convert_rules(self._rules, self._lists, self._regexes)
+        for string, callback in converted_rules.items():
+            self._converted_rules[re.compile(string, re.IGNORECASE)] = callback
 
     def _match(self, transcript):
-        for regex, callback in self._regexes.items():
+        for regex, callback in self._converted_rules.items():
             match = regex.match(transcript)
             if match:
                 callback(match)
