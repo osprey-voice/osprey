@@ -112,11 +112,14 @@ def listen_to_microphone(microphone, client, vad):
             # speech = vad.filter_phrases(stream)
             # speech = block_until_ready(speech)
             # results = client.stream_results(speech)
-            results = client.stream_results(stream)
-            for result in results:
-                notification = display_result(result, notification)
-                if result.is_final:
-                    match_result(result)
+            try:
+                results = client.stream_results(stream)
+                for result in results:
+                    notification = display_result(result, notification)
+                    if result.is_final:
+                        match_result(result)
+            except:
+                pass
 
 
 def main():
