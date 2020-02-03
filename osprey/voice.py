@@ -33,6 +33,10 @@ def is_enabled():
     return enabled
 
 
+def quit():
+    pass
+
+
 def press(key_string):
     keys = key_string.split(' ')
     for key in keys:
