@@ -20,7 +20,7 @@ MODIFIERS = [
 ]
 
 MISC = [
-    'Capslock',
+    'CapsLock',
     'Backspace',
     'Delete',
     'Enter',
