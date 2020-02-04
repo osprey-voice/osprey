@@ -11,6 +11,7 @@ import time
 import signal
 
 import appdirs
+import google
 from google.oauth2 import service_account
 from gi.repository import Gtk as gtk, Notify
 import pyaudio
@@ -154,7 +155,7 @@ def main():
                     if result.is_final:
                         match_result(result)
                 break
-            except:
+            except google.api_core.exceptions.OutOfRange:
                 pass
 
     _close_uinput()
