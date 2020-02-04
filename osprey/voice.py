@@ -6,7 +6,21 @@ import evdev
 
 from .evdev import KEY_MAP
 
-uinput = evdev.UInput()
+uinput = None
+
+
+def _open_uinput():
+    global uinput
+    if uinput is None:
+        uinput = evdev.UInput()
+
+
+def _close_uinput():
+    global uinput
+    if uinput is not None:
+        uinput.close()
+        uinput = None
+
 
 preferred_phrases: Set[str] = set()
 last_command: Optional[Callable[[], None]] = None

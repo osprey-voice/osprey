@@ -22,7 +22,7 @@ from .app.google_cloud_speech import Client
 from .app.indicator import Indicator
 from .app.vad import Vad
 from .evdev import KEY_MAP
-from .voice import context_groups, preferred_phrases
+from .voice import context_groups, preferred_phrases, _open_uinput, _close_uinput
 from . import conversions
 from . import control
 
@@ -150,6 +150,7 @@ def main():
     Indicator(APP_NAME, config_dir, log_file)
     vad = Vad(SAMPLE_RATE, CHUNK_SIZE, THRESHOLD_LEVEL,
               PADDING_DURATION_MS, VOICED_THRESHOLD, UNVOICED_THRESHOLD)
+    _open_uinput()
 
     thread = threading.Thread(target=listen_to_microphone, args=(microphone, client, vad))
     thread.daemon = True
