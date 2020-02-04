@@ -2,6 +2,13 @@ import queue
 
 import pyaudio
 
+singleton = None
+
+
+def get_singleton():
+    global singleton
+    return singleton
+
 
 class Microphone:
     """Opens a recording stream as a generator yielding the audio chunks."""
@@ -16,7 +23,10 @@ class Microphone:
         self._audio_interface = None
         self._audio_stream = None
 
-        self.open = False
+        self._open = False
+
+        global singleton
+        singleton = self
 
     def __enter__(self):
         self._audio_interface = pyaudio.PyAudio()
@@ -32,14 +42,14 @@ class Microphone:
             stream_callback=self._fill_audio_buffer,
         )
 
-        self.open = True
+        self._open = True
 
         return self
 
     def __exit__(self, type, value, traceback):
         self._audio_stream.stop_stream()
         self._audio_stream.close()
-        self.open = False
+        self._open = False
         # Signal the generator to terminate so that the client's
         # streaming_recognize method will not block the process termination.
         self._audio_buffer.put(None)
@@ -49,7 +59,7 @@ class Microphone:
         return self
 
     def __next__(self):
-        if not self.open:
+        if not self._open:
             raise StopIteration
         else:
             # Use a blocking get() to ensure there's at least one chunk of
@@ -64,3 +74,6 @@ class Microphone:
         """Continuously collect data from the audio stream, into the buffer."""
         self._audio_buffer.put(in_data)
         return None, pyaudio.paContinue
+
+    def close(self):
+        self._open = False

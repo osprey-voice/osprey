@@ -4,16 +4,15 @@ from .app import gi_require_version as _
 
 from pathlib import Path
 import sys
-import re
 import threading
 import importlib
 import itertools
 import time
+import signal
 
 import appdirs
 from google.oauth2 import service_account
-from gi.repository import Gtk as gtk, AppIndicator3 as appindicator, Notify
-import evdev
+from gi.repository import Gtk as gtk, Notify
 import pyaudio
 from google.cloud import speech
 
@@ -21,10 +20,8 @@ from .app.microphone import Microphone
 from .app.google_cloud_speech import Client
 from .app.indicator import Indicator
 from .app.vad import Vad
-from .evdev import KEY_MAP
 from .voice import context_groups, preferred_phrases, _open_uinput, _close_uinput
-from . import conversions
-from . import control
+from .control import quit_program
 
 APP_NAME = 'osprey'
 APP_NAME_CAPITALIZED = APP_NAME.capitalize()
@@ -109,22 +106,8 @@ def block_until_ready(gen):
     return recombined
 
 
-def listen_to_microphone(microphone, client, vad):
-    notification = None
-
-    with microphone as stream:
-        while True:
-            # speech = vad.filter_phrases(stream)
-            # speech = block_until_ready(speech)
-            # results = client.stream_results(speech)
-            try:
-                results = client.stream_results(stream)
-                for result in results:
-                    notification = display_result(result, notification)
-                    if result.is_final:
-                        match_result(result)
-            except:
-                pass
+def signal_handler(sig, frame):
+    quit_program()
 
 
 def main():
@@ -152,11 +135,30 @@ def main():
               PADDING_DURATION_MS, VOICED_THRESHOLD, UNVOICED_THRESHOLD)
     _open_uinput()
 
-    thread = threading.Thread(target=listen_to_microphone, args=(microphone, client, vad))
+    thread = threading.Thread(target=lambda: gtk.main())
     thread.daemon = True
     thread.start()
 
-    gtk.main()
+    signal.signal(signal.SIGINT, signal_handler)
+
+    notification = None
+    with microphone as stream:
+        while True:
+            # speech = vad.filter_phrases(stream)
+            # speech = block_until_ready(speech)
+            # results = client.stream_results(speech)
+            try:
+                results = client.stream_results(stream)
+                for result in results:
+                    notification = display_result(result, notification)
+                    if result.is_final:
+                        match_result(result)
+                break
+            except:
+                pass
+
+    _close_uinput()
+    gtk.main_quit()
 
 
 if __name__ == '__main__':

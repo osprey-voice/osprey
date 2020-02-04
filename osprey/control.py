@@ -1,3 +1,5 @@
+from .app.microphone import get_singleton
+
 enabled = True
 
 
@@ -21,5 +23,5 @@ def is_enabled():
     return enabled
 
 
-def quit():
-    pass
+def quit_program():
+    get_singleton().close()

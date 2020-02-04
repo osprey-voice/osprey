@@ -1,6 +1,7 @@
 from gi.repository import Gtk as gtk, AppIndicator3 as appindicator
 
 from ..open import open
+from ..control import quit_program
 
 
 class Indicator():
@@ -111,4 +112,4 @@ class Indicator():
         open(self._log_file)
 
     def _quit(self, source):
-        gtk.main_quit()
+        quit_program()
