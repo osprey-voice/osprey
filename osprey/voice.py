@@ -55,7 +55,7 @@ def insert(custom_string):
         else:
             press(char)
         # needed otherwise evdev will reject some input
-        time.sleep(.001)
+        time.sleep(.01)
     global last_command
     last_command = lambda: insert(custom_string)  # noqa
 
