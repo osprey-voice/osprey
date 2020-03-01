@@ -65,15 +65,18 @@ def compile_regexes():
 def display_result(result, notification):
     transcript = result.transcript
 
-    if not result.is_final:
-        if notification:
-            notification.update(APP_NAME_CAPITALIZED, transcript)
-        else:
-            notification = Notify.Notification.new(APP_NAME_CAPITALIZED, transcript)
-        notification.show()
+    title = APP_NAME_CAPITALIZED
+    if result.is_final:
+        title += ' [FINAL]'
+
+    if notification:
+        notification.update(title, transcript)
     else:
-        notification.update(f'{APP_NAME_CAPITALIZED} [FINAL]', transcript)
-        notification.show()
+        notification = Notify.Notification.new(title, transcript)
+
+    notification.show()
+
+    if result.is_final:
         notification = None
 
     return notification
