@@ -2,9 +2,9 @@
 
 [![Matrix](https://img.shields.io/matrix/osprey:matrix.org)](https://matrix.to/#/#osprey:matrix.org)
 
-Osprey is a desktop program that runs as a daemon that allows for voice based computer input and usage and is an open source version of [talonvoice](https://talonvoice.com/). It can be used for coding, commanding, and dictating to a computer in a highly efficient manner. It is being initially developed for Linux and Swaywm and uses Google Cloud Speech-to-Text for voice transcription but other platforms and voice engines are welcome to be incorporated.
+Osprey is a voice typing program that allows you to use your computer and type with your voice. It can be used for coding, web browsing, dictating, and more in a highly efficient manner. It is being initially developed for Linux and Swaywm and uses Google Cloud Speech-to-Text for speech recognition but other platforms and engines are welcome to be incorporated.
 
-Osprey works by converting microphone audio to voice transcriptions using a speech-to-text engine, then matching the transcriptions to user specified commands and keyboard input. It is highly configurable with Python, and uses Python scripts to match voice transcriptions with computer commands using the APIs provided by Osprey. No commands are included by default, but a starter pack of Osprey scripts exists at [osprey-starter-pack](https://github.com/osprey-voice/osprey-starter-pack).
+Osprey works by first transcribing microphone audio to text using a speech recognition engine, then matching the transcription to user specified commands and keyboard input. It is highly configurable with Python, and uses Python scripts to specify the commands using the Osprey APIs. No commands are included by default, but a starter pack of Osprey scripts exists at [osprey-starter-pack](https://github.com/osprey-voice/osprey-starter-pack).
 
 Official resources:
 
@@ -65,7 +65,7 @@ In order to simulate keypresses on Linux, the current user needs to gain write a
 
 To enable this:
 
-- Copy the [`40-uinput.rules`](./40-uinput.rules) udev rule to `/etc/udev/rules.d/` (requires `sudo`) to change the permissions on `/dev/uinput` to allow for members of the `uinput` group to write to it
+- Copy [`40-uinput.rules`](./40-uinput.rules) to `/etc/udev/rules.d/` (requires `sudo`) to change the permissions on `/dev/uinput` to allow for members of the `uinput` group to write to it
 - Run `sudo groupadd uinput` to create the `uinput` group
 - Run `sudo usermod -a -G uinput $USER` to add the current user to the `uinput` group
 - Then restart your computer to allow for the udev rule to go into effect
