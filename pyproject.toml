@@ -7,11 +7,12 @@ license = "MIT"
 
 [tool.poetry.dependencies]
 python = "^3.5"
+
+appdirs = "^1.4"
+evdev = "^1.2"
 google-cloud-speech = "^1.2"
 pyaudio = "^0.2.11"
-appdirs = "^1.4"
 pygobject = "^3.34"
-evdev = "^1.2"
 webrtcvad = "^2.0.10"
 
 [tool.poetry.dev-dependencies]

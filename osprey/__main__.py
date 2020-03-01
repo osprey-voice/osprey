@@ -31,7 +31,11 @@ LOG_FILE_NAME = 'logs.txt'
 CREDENTIALS_FILE_NAME = 'credentials.json'
 
 SAMPLE_RATE = 16000
-CHUNK_SIZE = SAMPLE_RATE // 100  # 10ms
+MILLISECONDS_PER_SECONDS = 1000
+CHUNK_RATE = 10  # needs to evenly divided sample rate and milliseconds per seconds
+# chunk size is the duration in milliseconds of each chunk/buffer
+CHUNK_SIZE = MILLISECONDS_PER_SECONDS // CHUNK_RATE
+FRAMES_PER_BUFFER = SAMPLE_RATE // CHUNK_RATE
 PADDING_DURATION_MS = 2000
 VOICED_THRESHOLD = .9
 UNVOICED_THRESHOLD = .9
@@ -131,11 +135,11 @@ def main():
     read_scripts(config_dir)
     compile_regexes()
 
-    microphone = Microphone(SAMPLE_RATE, CHUNK_SIZE, AUDIO_FORMAT, AUDIO_CHANNELS)
+    microphone = Microphone(SAMPLE_RATE, FRAMES_PER_BUFFER, AUDIO_FORMAT, AUDIO_CHANNELS)
     client = Client(credentials, SAMPLE_RATE, AUDIO_ENCODING,
                     preferred_phrases, INTERIM_RESULTS, LANGUAGE_CODE)
     Indicator(APP_NAME, config_dir, log_file)
-    vad = Vad(SAMPLE_RATE, CHUNK_SIZE, THRESHOLD_LEVEL,
+    vad = Vad(SAMPLE_RATE, FRAMES_PER_BUFFER, THRESHOLD_LEVEL,
               PADDING_DURATION_MS, VOICED_THRESHOLD, UNVOICED_THRESHOLD)
     _open_uinput()
 

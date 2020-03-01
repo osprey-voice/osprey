@@ -13,9 +13,9 @@ def get_singleton():
 class Microphone:
     """Opens a recording stream as a generator yielding the audio chunks."""
 
-    def __init__(self, sample_rate, chunk_size, audio_format, audio_channels):
+    def __init__(self, sample_rate, frames_per_buffer, audio_format, audio_channels):
         self._sample_rate = sample_rate
-        self._chunk_size = chunk_size
+        self._frames_per_buffer = frames_per_buffer
         self._audio_format = audio_format
         self._audio_channels = audio_channels
 
@@ -35,7 +35,7 @@ class Microphone:
             channels=self._audio_channels,
             rate=self._sample_rate,
             input=True,
-            frames_per_buffer=self._chunk_size,
+            frames_per_buffer=self._frames_per_buffer,
             # Run the audio stream asynchronously to fill the buffer object.
             # This is necessary so that the input device's buffer doesn't
             # overflow while the calling thread makes network requests, etc.
@@ -50,8 +50,7 @@ class Microphone:
         self._audio_stream.stop_stream()
         self._audio_stream.close()
         self._open = False
-        # Signal the generator to terminate so that the client's
-        # streaming_recognize method will not block the process termination.
+        # Signal the generator to terminate.
         self._audio_buffer.put(None)
         self._audio_interface.terminate()
 
