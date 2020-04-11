@@ -1,6 +1,6 @@
 # Osprey
 
-[![Matrix](https://img.shields.io/matrix/osprey:matrix.org)](https://matrix.to/#/#osprey:matrix.org)
+[![Matrix](https://img.shields.io/badge/matrix-%23osprey-blue.svg)](https://matrix.to/#/#osprey:matrix.org)
 
 Osprey is a voice typing program that allows you to use your computer and type with your voice. It can be used for coding, web browsing, dictating, and more in a highly efficient manner. It is being initially developed for Linux and Swaywm and uses Google Cloud Speech-to-Text for speech recognition but other platforms and engines are welcome to be incorporated.
 
