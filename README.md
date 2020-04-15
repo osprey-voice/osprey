@@ -101,4 +101,5 @@ systemctl --user enable osprey
 ## Related projects
 
 - [Caster](https://github.com/dictation-toolbox/Caster)
+- [Serenade](https://serenade.ai/) (closed source)
 - [Talon](https://talonvoice.com/) (closed source)
