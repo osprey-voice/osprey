@@ -25,6 +25,7 @@ Other great resources for help getting started:
 - Linux
 - Wayland
 - Python 3.5+
+- GTK3
 - PortAudio
 - A (decent) microphone
 - A compatible Kaldi language model
