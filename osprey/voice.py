@@ -1,8 +1,8 @@
-import re
-from typing import Set, Optional, Callable
+from typing import Set, Optional as OptionalType, Callable
 import time
 
 import evdev
+from dragonfly import CompoundRule, Dictation, Choice, Integer, Repetition, Optional
 
 from .evdev import KEY_MAP
 
@@ -22,8 +22,7 @@ def _close_uinput():
         uinput = None
 
 
-preferred_phrases: Set[str] = set()
-last_command: Optional[Callable[[], None]] = None
+last_command: OptionalType[Callable[[], None]] = None
 
 
 def press(key_string):
@@ -91,60 +90,6 @@ class ContextGroup:
 default_context_group = ContextGroup('default')
 
 
-def _convert_rules(rules, lists, regexes):
-    def named_regex(name, regex):
-        return r'(?P<{}>{})'.format(name, regex)
-
-    def list_to_regex(list):
-        return r'(\b({})\b\s?)'.format('|'.join(list))
-
-    quantifiers = ['*', '+']
-
-    converted_regexes = {key: list_to_regex(val) for key, val in lists.items()}
-    quantified_regexes = {f'{key}{quantifier}': rf'{val}{quantifier}' for key,
-                          val in converted_regexes.items() for quantifier in quantifiers}
-    converted_regexes.update(quantified_regexes)
-    converted_regexes.update(regexes)
-    named_regexes = {key: named_regex(
-        key[:-1] if key[-1] in quantifiers else key, val) for key, val in converted_regexes.items()}
-
-    def convert_rule(rule):
-        return rule.format_map(named_regexes)
-
-    def convert_match(match, lists):
-        converted_match = {}
-        for name, val in match.groupdict().items():
-            if val != '':
-                if name in lists:
-                    matches = []
-                    tokens = val.strip().split(' ')[::-1]  # `[::-1]` reverses list
-                    cur = ""
-                    while len(tokens) != 0:
-                        cur = tokens.pop() if cur == "" else cur + " " + tokens.pop()
-                        if cur.lower() in lists[name]:
-                            matches.append(cur)
-                            cur = ""
-                    converted_match[name] = matches
-                else:
-                    converted_match[name] = [val]
-        return converted_match
-
-    converted = {}
-    for key, val in rules.items():
-        # `val=val` used to fix late binding
-        # https://stackoverflow.com/questions/3431676/creating-functions-in-a-loop
-        def callback(m, val=val):
-            if isinstance(val, list):
-                converted_match = convert_match(m, lists)
-                for cb in val:
-                    cb(converted_match)
-            else:
-                val(convert_match(m, lists))
-        converted[convert_rule(key)] = callback
-
-    return converted
-
-
 class Context:
     def __init__(self, name, app=None, exe=None, bundle=None,
                  title=None, func=None, group=default_context_group):
@@ -158,9 +103,7 @@ class Context:
         self._group = group
 
         self._rules = {}
-        self._converted_rules = {}
         self._lists = {}
-        self._regexes = {}
 
         group._contexts[name] = self
 
@@ -170,19 +113,45 @@ class Context:
     def set_lists(self, lists):
         self._lists = lists
 
-    def set_regexes(self, regexes):
-        self._regexes = regexes
+    def _compile(self, grammar):
+        for rule, action in self._rules.items():
+            extras = {}
+            if '<phrase>' in rule:
+                extras['phrase'] = Dictation('phrase')
+            if '<n>' in rule:
+                extras['n'] = Integer('n', 1, 100)
+            for name, l in self._lists.items():
+                if f'<{name}>*' in rule:
+                    extras[name] = Optional(Repetition(Choice('', {x: x for x in l}), max=5), name=name)
+                elif f'<{name}>+' in rule:
+                    extras[name] = Repetition(Choice('', {x: x for x in l}), max=5, name=name)
+                elif f'<{name}>' in rule:
+                    extras[name] = Choice(name, {x: x for x in l})
 
-    def _compile(self):
-        converted_rules = _convert_rules(self._rules, self._lists, self._regexes)
-        for string, callback in converted_rules.items():
-            self._converted_rules[re.compile(string, re.IGNORECASE)] = callback
+            corrected_rule = rule.replace('*', '').replace('+', '')
 
-    def _match(self, transcript):
-        for regex, callback in self._converted_rules.items():
-            match = regex.match(transcript)
-            if match:
-                callback(match)
-                transcript = transcript.replace(match[0], '').strip()
-                return (True, transcript)
-        return (False, transcript)
+            # default parameters used to fix late binding
+            # https://stackoverflow.com/questions/3431676/creating-functions-in-a-loop
+            def _process_recognition(self, _node, extras, identifiers=extras.keys(), action=action):
+                m = {}
+                for key, val in extras.items():
+                    if key in identifiers:
+                        if val is None:
+                            m[key] = []
+                        elif key == 'phrase':
+                            m[key] = val.format()
+                        else:
+                            m[key] = val
+                action(m)
+
+            rule = type(
+                f'{self._name}: {rule}',
+                (CompoundRule,),
+                {
+                    'spec': corrected_rule,
+                    'extras': list(extras.values()),
+                    '_process_recognition': _process_recognition,
+                },
+            )()
+
+            grammar.add_rule(rule)

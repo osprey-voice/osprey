@@ -9,9 +9,8 @@ license = "MIT"
 python = "^3.5"
 
 appdirs = "^1.4"
+dragonfly2 = { extras = ["kaldi"], version = "^0.23.2" }
 evdev = "^1.2"
-google-cloud-speech = "^1.2"
-pyaudio = "^0.2.11"
 pygobject = "^3.34"
 webrtcvad = "^2.0.10"
 

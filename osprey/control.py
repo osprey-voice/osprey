@@ -1,4 +1,4 @@
-from .app.microphone import get_singleton
+from .app.kaldi import get_singleton
 
 enabled = True
 
@@ -24,4 +24,4 @@ def is_enabled():
 
 
 def quit_program():
-    get_singleton().close()
+    get_singleton().engine.disconnect()
