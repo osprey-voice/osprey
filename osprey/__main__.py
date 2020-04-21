@@ -9,6 +9,7 @@ import importlib
 import signal
 
 import appdirs
+import dragonfly
 from dragonfly import Grammar
 from gi.repository import Gtk as gtk, Notify
 
@@ -39,24 +40,13 @@ def compile_regexes(grammar):
             context._compile(grammar)
 
 
-def display_result(result, notification):
-    transcript = result.transcript
+def show_notification(result):
+    Notify.Notification.new(APP_NAME_CAPITALIZED, result).show()
 
-    title = APP_NAME_CAPITALIZED
-    if result.is_final:
-        title += ' [FINAL]'
 
-    if notification:
-        notification.update(title, transcript)
-    else:
-        notification = Notify.Notification.new(title, transcript)
-
-    notification.show()
-
-    if result.is_final:
-        notification = None
-
-    return notification
+def on_recognition(words, rule, node):
+    result = ' '.join(words)
+    show_notification(result)
 
 
 def signal_handler(sig, frame):
@@ -74,6 +64,7 @@ def main():
     kaldi = Kaldi(config_dir)
     kaldi.engine.connect()
     _open_uinput()
+    dragonfly.register_recognition_callback(on_recognition)
 
     grammar = Grammar('default')
     sys.path.append(str(config_dir))
@@ -87,7 +78,6 @@ def main():
 
     signal.signal(signal.SIGINT, signal_handler)
 
-    # notification = None
     kaldi.engine.do_recognition()
 
     _close_uinput()
