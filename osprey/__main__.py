@@ -23,6 +23,7 @@ APP_NAME = 'osprey'
 APP_NAME_CAPITALIZED = APP_NAME.capitalize()
 
 LOG_FILE_NAME = 'logs.txt'
+HISTORY_FILE_NAME = 'history'
 
 show_notifications = True
 
@@ -60,8 +61,8 @@ def signal_handler(sig, frame):
 def main():
     app_dirs = appdirs.AppDirs(APP_NAME)
     config_dir = Path(app_dirs.user_config_dir)
-    log_dir = Path(app_dirs.user_log_dir)
-    log_file = log_dir.joinpath(LOG_FILE_NAME)
+    log_file = config_dir.joinpath(LOG_FILE_NAME)
+    history_file = config_dir.joinpath(HISTORY_FILE_NAME)
 
     sys.path.append(str(config_dir))
     read_scripts(config_dir)
@@ -74,7 +75,7 @@ def main():
         disable()
 
     Notify.init(APP_NAME)
-    Indicator(APP_NAME, config_dir, log_file)
+    Indicator(APP_NAME, config_dir, log_file, history_file)
     kaldi = Kaldi(config_dir, config['kaldi'])
     kaldi.engine.connect()
     _open_uinput()

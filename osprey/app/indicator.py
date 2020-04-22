@@ -5,9 +5,10 @@ from ..control import quit_program
 
 
 class Indicator():
-    def __init__(self, app_name, config_dir, log_file):
+    def __init__(self, app_name, config_dir, log_file, history_file):
         self._config_dir = config_dir
         self._log_file = log_file
+        self._history_file = history_file
 
         icon_path = gtk.STOCK_INFO
         self._indicator = appindicator.Indicator.new(
@@ -56,6 +57,10 @@ class Indicator():
         item.connect('activate', self._open_log_file)
         menu.append(item)
 
+        item = gtk.MenuItem('Open History File')
+        item.connect('activate', self._open_history_file)
+        menu.append(item)
+
         separator = gtk.SeparatorMenuItem()
         menu.append(separator)
 
@@ -71,6 +76,9 @@ class Indicator():
 
     def _open_log_file(self, source):
         open(self._log_file)
+
+    def _open_history_file(self, source):
+        open(self._history_file)
 
     def _quit(self, source):
         quit_program()
