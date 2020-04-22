@@ -1,7 +1,5 @@
 # Osprey
 
-**Currently a work in progress and not ready to be used yet.**
-
 [![Matrix](https://img.shields.io/badge/matrix-%23osprey-blue.svg)](https://matrix.to/#/#osprey:matrix.org)
 
 Osprey is a voice typing program that allows you to use your computer and type with your voice. It can be used for coding, web browsing, dictating, and more in an efficient and reliable way. It is being initially developed for Linux and Wayland and uses [Kaldi](https://github.com/kaldi-asr/kaldi) for speech recognition but other platforms and engines are welcome to be incorporated.
