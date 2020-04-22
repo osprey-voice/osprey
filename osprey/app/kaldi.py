@@ -9,7 +9,7 @@ def get_singleton():
 
 
 class Kaldi:
-    def __init__(self, config_dir):
+    def __init__(self, config_dir, config):
         self.engine = get_engine(
             'kaldi',
 
@@ -22,10 +22,10 @@ class Kaldi:
             retain_audio=None,
             retain_metadata=None,
 
-            vad_aggressiveness=3,
-            vad_padding_start_ms=150,
-            vad_padding_end_ms=150,
-            vad_complex_padding_end_ms=500,
+            vad_aggressiveness=config['vad_aggressiveness'],
+            vad_padding_start_ms=config['vad_padding_start_ms'],
+            vad_padding_end_ms=config['vad_padding_end_ms'],
+            vad_complex_padding_end_ms=config['vad_complex_padding_end_ms'],
 
             auto_add_to_user_lexicon=True,
             lazy_compilation=True,

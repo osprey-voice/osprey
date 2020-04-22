@@ -16,12 +16,15 @@ from gi.repository import Gtk as gtk, Notify
 from .app.indicator import Indicator
 from .app.kaldi import Kaldi
 from .voice import context_groups, _open_uinput, _close_uinput
-from .control import quit_program
+from .control import quit_program, disable
+from .config import get_config
 
 APP_NAME = 'osprey'
 APP_NAME_CAPITALIZED = APP_NAME.capitalize()
 
 LOG_FILE_NAME = 'logs.txt'
+
+show_notifications = True
 
 
 def read_scripts(config_dir):
@@ -46,7 +49,8 @@ def show_notification(result):
 
 def on_recognition(words, rule, node):
     result = ' '.join(words)
-    show_notification(result)
+    if show_notifications:
+        show_notification(result)
 
 
 def signal_handler(sig, frame):
@@ -59,16 +63,24 @@ def main():
     log_dir = Path(app_dirs.user_log_dir)
     log_file = log_dir.joinpath(LOG_FILE_NAME)
 
+    sys.path.append(str(config_dir))
+    read_scripts(config_dir)
+    config = get_config()
+
+    global show_notifications
+    show_notifications = config['show_notifications']
+
+    if not config['enable_by_default']:
+        disable()
+
     Notify.init(APP_NAME)
     Indicator(APP_NAME, config_dir, log_file)
-    kaldi = Kaldi(config_dir)
+    kaldi = Kaldi(config_dir, config['kaldi'])
     kaldi.engine.connect()
     _open_uinput()
     dragonfly.register_recognition_callback(on_recognition)
 
     grammar = Grammar('default')
-    sys.path.append(str(config_dir))
-    read_scripts(config_dir)
     compile_regexes(grammar)
     grammar.load()
 
