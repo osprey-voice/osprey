@@ -41,47 +41,8 @@ class Indicator():
         item.set_submenu(create_microphone_menu())
         menu.append(item)
 
-        item = gtk.MenuItem('Speech Recognition')
-
-        def create_speech_recognition_menu():
-            sub_menu = gtk.Menu()
-
-            sub_item = gtk.CheckMenuItem('Enable')
-            sub_item.set_active(True)
-            sub_menu.append(sub_item)
-
-            separator = gtk.SeparatorMenuItem()
-            sub_menu.append(separator)
-
-            sub_item = gtk.MenuItem('Language:')
-
-            def create_language_menu():
-                sub_menu = gtk.Menu()
-
-                sub_item = gtk.MenuItem('English')
-                sub_menu.append(sub_item)
-
-                return sub_menu
-
-            sub_item.set_submenu(create_language_menu())
-            sub_menu.append(sub_item)
-
-            sub_item = gtk.MenuItem('Engine:')
-
-            def create_engine_menu():
-                sub_menu = gtk.Menu()
-
-                sub_item = gtk.MenuItem('Google Cloud Speech-to-Text')
-                sub_menu.append(sub_item)
-
-                return sub_menu
-
-            sub_item.set_submenu(create_engine_menu())
-            sub_menu.append(sub_item)
-
-            return sub_menu
-
-        item.set_submenu(create_speech_recognition_menu())
+        item = gtk.CheckMenuItem('Enable Speech Recognition')
+        item.set_active(True)
         menu.append(item)
 
         separator = gtk.SeparatorMenuItem()
