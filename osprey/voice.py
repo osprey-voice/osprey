@@ -45,6 +45,9 @@ def press(key_string):
     last_command = lambda: press(key_string)  # noqa
 
 
+previously_inserted_string = ''
+
+
 def insert(custom_string):
     for char in custom_string:
         if char == ' ':
@@ -55,8 +58,19 @@ def insert(custom_string):
             press(char)
         # needed otherwise evdev will reject some input
         time.sleep(.01)
+
     global last_command
     last_command = lambda: insert(custom_string)  # noqa
+
+    global previously_inserted_string
+    previously_inserted_string = custom_string
+
+
+def undo_insert():
+    press('Backspace')
+
+    global previously_inserted_string
+    repeat(len(previously_inserted_string))
 
 
 def repeat(count):
