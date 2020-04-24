@@ -2,7 +2,7 @@
 
 [![Matrix](https://img.shields.io/badge/matrix-%23osprey-blue.svg)](https://matrix.to/#/#osprey:matrix.org)
 
-Osprey is a voice typing program that allows you to use your computer and type with your voice. It can be used for coding, web browsing, dictating, and more in an efficient and reliable way. It is being initially developed for Linux and Wayland and uses [Kaldi](https://github.com/kaldi-asr/kaldi) for speech recognition but other platforms and engines are welcome to be incorporated.
+Osprey is a cross-platform voice typing program that allows you to use your computer and type with your voice. It can be used for coding, web browsing, dictating, and more in an efficient and reliable way. It is built on top of [Dragonfly](https://github.com/dictation-toolbox/dragonfly) and [Kaldi Active Grammar](https://github.com/daanzu/kaldi-active-grammar) which uses [Kaldi](https://github.com/kaldi-asr/kaldi) for speech recognition but other engines are welcome to be incorporated.
 
 Osprey works by first transcribing microphone audio to text using a speech recognition engine, then it matches the transcription to user specified commands and keyboard input. It is highly configurable with Python, and uses Python scripts to specify the commands using the Osprey APIs. No commands are included by default, but an official starter pack of Osprey scripts exists at [osprey-starter-pack](https://github.com/osprey-voice/osprey-starter-pack).
 
@@ -20,8 +20,6 @@ Other great resources for help getting started:
 
 ## Requirements
 
-- Linux
-- Wayland
 - Python 3.5+
 - GTK3
 - PortAudio
