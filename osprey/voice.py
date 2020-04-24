@@ -45,7 +45,7 @@ def press(key_string):
     last_command = lambda: press(key_string)  # noqa
 
 
-previously_inserted_string = ''
+previously_inserted_string: OptionalType[str] = None
 
 
 def insert(custom_string):
@@ -67,10 +67,10 @@ def insert(custom_string):
 
 
 def undo_insert():
-    press('Backspace')
-
     global previously_inserted_string
-    repeat(len(previously_inserted_string))
+    if previously_inserted_string:
+        press('Backspace')
+        repeat(len(previously_inserted_string) - 1)
 
 
 def repeat(count):
