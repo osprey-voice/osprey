@@ -133,7 +133,7 @@ class Context:
             if '<phrase>' in rule:
                 extras['phrase'] = Dictation('phrase')
             if '<n>' in rule:
-                extras['n'] = Integer('n', 1, 100)
+                extras['n'] = Integer('n', 0, 101)
             for name, l in self._lists.items():
                 if f'<{name}>*' in rule:
                     extras[name] = Optional(Repetition(Choice('', {x: x for x in l}), max=5), name=name)
