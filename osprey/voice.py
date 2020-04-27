@@ -1,45 +1,21 @@
 from typing import Set, Optional as OptionalType, Callable
 import time
+import os
 
-import evdev
 from dragonfly import CompoundRule, Dictation, Choice, Integer, Repetition, Optional
 
-from .evdev import KEY_MAP
+from .evdev import evdev_press, evdev_insert
+from .pyautogui import pyautogui_press, pyautogui_insert
 
-uinput = None
-
-
-def _open_uinput():
-    global uinput
-    if uinput is None:
-        uinput = evdev.UInput()
-
-
-def _close_uinput():
-    global uinput
-    if uinput is not None:
-        uinput.close()
-        uinput = None
-
+IS_WAYLAND_RUNNING = os.environ['XDG_SESSION_TYPE'] == 'wayland'
+PRESS_FUNCTION = evdev_press if IS_WAYLAND_RUNNING else pyautogui_press
+INSERT_FUNCTION = evdev_insert if IS_WAYLAND_RUNNING else pyautogui_insert
 
 last_command: OptionalType[Callable[[], None]] = None
 
 
 def press(key_string):
-    keys = key_string.split(' ')
-    for key in keys:
-        if isinstance(KEY_MAP[key], list):
-            uinput.write(evdev.ecodes.EV_KEY, KEY_MAP[key][0], 1)
-            uinput.write(evdev.ecodes.EV_KEY, KEY_MAP[key][1], 1)
-        else:
-            uinput.write(evdev.ecodes.EV_KEY, KEY_MAP[key], 1)
-    for key in keys[::-1]:  # `[::-1]` reverses list
-        if isinstance(KEY_MAP[key], list):
-            uinput.write(evdev.ecodes.EV_KEY, KEY_MAP[key][1], 0)
-            uinput.write(evdev.ecodes.EV_KEY, KEY_MAP[key][0], 0)
-        else:
-            uinput.write(evdev.ecodes.EV_KEY, KEY_MAP[key], 0)
-    uinput.syn()
+    PRESS_FUNCTION(key_string)
 
     global last_command
     last_command = lambda: press(key_string)  # noqa
@@ -49,15 +25,7 @@ previously_inserted_string: OptionalType[str] = None
 
 
 def insert(custom_string):
-    for char in custom_string:
-        if char == ' ':
-            press('Space')
-        elif char == '\t':
-            press('Tab')
-        else:
-            press(char)
-        # needed otherwise evdev will reject some input
-        time.sleep(.01)
+    INSERT_FUNCTION(custom_string)
 
     global last_command
     last_command = lambda: insert(custom_string)  # noqa
@@ -136,7 +104,8 @@ class Context:
                 extras['n'] = Integer('n', 0, 101)
             for name, l in self._lists.items():
                 if f'<{name}>*' in rule:
-                    extras[name] = Optional(Repetition(Choice('', {x: x for x in l}), max=5), name=name)
+                    extras[name] = Optional(Repetition(
+                        Choice('', {x: x for x in l}), max=5), name=name)
                 elif f'<{name}>+' in rule:
                     extras[name] = Repetition(Choice('', {x: x for x in l}), max=5, name=name)
                 elif f'<{name}>' in rule:

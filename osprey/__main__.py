@@ -15,7 +15,8 @@ from gi.repository import Gtk as gtk, Notify
 
 from .app.indicator import Indicator
 from .app.kaldi import Kaldi
-from .voice import context_groups, _open_uinput, _close_uinput
+from .voice import context_groups, IS_WAYLAND_RUNNING
+from .evdev import _open_uinput, _close_uinput
 from .control import quit_program, disable
 from .config import get_config
 
@@ -78,7 +79,8 @@ def main():
     Indicator(APP_NAME, config_dir, log_file, history_file)
     kaldi = Kaldi(config_dir, config['kaldi'])
     kaldi.engine.connect()
-    _open_uinput()
+    if IS_WAYLAND_RUNNING:
+        _open_uinput()
     dragonfly.register_recognition_callback(on_recognition)
 
     grammar = Grammar('default')
@@ -93,7 +95,8 @@ def main():
 
     kaldi.engine.do_recognition()
 
-    _close_uinput()
+    if IS_WAYLAND_RUNNING:
+        _close_uinput()
     gtk.main_quit()
 
 

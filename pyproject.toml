@@ -11,6 +11,7 @@ python = "^3.5"
 appdirs = "^1.4"
 dragonfly2 = { version = "^0.23.2", extras = ["kaldi"] }
 evdev = { version = "^1.2", platform = "linux" }
+pyautogui = "^0.9.50"
 pygobject = "^3.34"
 webrtcvad = "^2.0.10"
 
