@@ -9,15 +9,15 @@ license = "MIT"
 python = "^3.5"
 
 appdirs = "^1.4"
-dragonfly2 = { extras = ["kaldi"], version = "^0.23.2" }
-evdev = "^1.2"
+dragonfly2 = { version = "^0.23.2", extras = ["kaldi"] }
+evdev = { version = "^1.2", platform = "linux" }
 pygobject = "^3.34"
 webrtcvad = "^2.0.10"
 
 [tool.poetry.dev-dependencies]
 
 [tool.poetry.scripts]
-osprey = 'osprey:main'
+osprey = "osprey:main"
 
 [build-system]
 requires = ["poetry>=0.12"]
