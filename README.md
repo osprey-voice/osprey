@@ -32,7 +32,13 @@ Other great resources for help getting started:
 Install using [pipx](https://github.com/pipxproject/pipx) with:
 
 ```bash
-pipx install --spec git+https://github.com/osprey-voice/osprey osprey
+pipx install git+https://github.com/osprey-voice/osprey
+```
+
+Osprey can later be upgraded with:
+
+```bash
+pipx upgrade osprey
 ```
 
 ### Osprey Starter Pack
