@@ -63,7 +63,7 @@ FUNCTION = [
 UTILS = [
     'VolumeUp',
     'VolumeDown',
-    'Mute',
+    'VolumeMute',
 ]
 
 WHITESPACE = [

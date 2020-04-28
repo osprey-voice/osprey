@@ -55,11 +55,16 @@ MISC = {
     'Escape': 'esc',
 }
 
+UTILS = {
+    'VolumeMute': 'mute',
+}
+
 KEY_MAP.update({key: key for key in KEYS})
 KEY_MAP.update({key: ['Shift', key.lower()] for key in string.ascii_uppercase})
 KEY_MAP.update(PUNCTUATION)
 KEY_MAP.update(MODIFIERS)
 KEY_MAP.update(MISC)
+KEY_MAP.update(UTILS)
 
 KEY_MAP.update({key: ecodes[f'KEY_{value.upper()}']
                 for (key, value) in KEY_MAP.items() if isinstance(value, str)})
