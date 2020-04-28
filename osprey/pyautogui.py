@@ -3,9 +3,6 @@ import pyautogui
 from . import keys
 
 KEY_MAP = {key: key.lower() for key in keys.KEYS}
-KEY_MAP.update({
-    'Escape': 'esc',
-})
 
 
 def pyautogui_press(key_string):
