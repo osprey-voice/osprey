@@ -11,11 +11,8 @@ PUNCTUATION = list(string.punctuation)
 MODIFIERS = [
     'Cmd',
     'Ctrl',
-    'RightCtrl',
     'Alt',
-    'RightAlt',
     'Shift',
-    'RightShift',
     'Fn',
 ]
 
