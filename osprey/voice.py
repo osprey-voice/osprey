@@ -85,15 +85,15 @@ class Context:
         self._group = group
 
         self._commands = {}
-        self._lists = {}
+        self._choices = {}
 
         group._contexts[name] = self
 
     def set_commands(self, commands):
         self._commands = commands
 
-    def set_lists(self, lists):
-        self._lists = lists
+    def set_choices(self, choices):
+        self._choices = choices
 
     def _compile(self, grammar):
         for rule, action in self._commands.items():
@@ -102,14 +102,14 @@ class Context:
                 extras['phrase'] = Dictation('phrase')
             if '<n>' in rule:
                 extras['n'] = Integer('n', 0, 101)
-            for name, l in self._lists.items():
+            for name, choice in self._choices.items():
                 if f'<{name}>*' in rule:
                     extras[name] = Optional(Repetition(
-                        Choice('', {x: x for x in l}), max=5), name=name)
+                        Choice('', {x: x for x in choice}), max=5), name=name)
                 elif f'<{name}>+' in rule:
-                    extras[name] = Repetition(Choice('', {x: x for x in l}), max=5, name=name)
+                    extras[name] = Repetition(Choice('', {x: x for x in choice}), max=5, name=name)
                 elif f'<{name}>' in rule:
-                    extras[name] = Choice(name, {x: x for x in l})
+                    extras[name] = Choice(name, {x: x for x in choice})
 
             corrected_rule = rule.replace('*', '').replace('+', '')
 
