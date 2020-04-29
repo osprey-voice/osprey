@@ -84,19 +84,19 @@ class Context:
         self._func = func
         self._group = group
 
-        self._rules = {}
+        self._commands = {}
         self._lists = {}
 
         group._contexts[name] = self
 
-    def set_rules(self, rules):
-        self._rules = rules
+    def set_commands(self, commands):
+        self._commands = commands
 
     def set_lists(self, lists):
         self._lists = lists
 
     def _compile(self, grammar):
-        for rule, action in self._rules.items():
+        for rule, action in self._commands.items():
             extras = {}
             if '<phrase>' in rule:
                 extras['phrase'] = Dictation('phrase')
