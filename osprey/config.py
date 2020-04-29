@@ -1,6 +1,7 @@
 config = {
     'enable_by_default': True,
-    'show_notifications': True,
+    'enable_ccr': True,
+    'enable_notifications': True,
     'kaldi': {
         'vad_aggressiveness': 3,
         'vad_padding_start_ms': 150,

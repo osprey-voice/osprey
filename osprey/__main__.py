@@ -26,7 +26,7 @@ APP_NAME_CAPITALIZED = APP_NAME.capitalize()
 LOG_FILE_NAME = 'logs.txt'
 HISTORY_FILE_NAME = 'history'
 
-show_notifications = True
+enable_notifications = True
 
 
 def read_scripts(config_dir):
@@ -51,7 +51,7 @@ def show_notification(result):
 
 def on_recognition(words, rule, node):
     result = ' '.join(words)
-    if show_notifications:
+    if enable_notifications:
         show_notification(result)
 
 
@@ -69,8 +69,8 @@ def main():
     read_scripts(config_dir)
     config = get_config()
 
-    global show_notifications
-    show_notifications = config['show_notifications']
+    global enable_notifications
+    enable_notifications = config['enable_notifications']
 
     if not config['enable_by_default']:
         disable()
