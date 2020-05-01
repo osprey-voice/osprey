@@ -22,6 +22,7 @@ from .config import get_config
 
 APP_NAME = 'osprey'
 APP_NAME_CAPITALIZED = APP_NAME.capitalize()
+APP_AUTHOR = 'osprey-voice'
 
 LOG_FILE_NAME = 'logs.txt'
 HISTORY_FILE_NAME = 'history'
@@ -60,7 +61,7 @@ def signal_handler(sig, frame):
 
 
 def main():
-    app_dirs = appdirs.AppDirs(APP_NAME)
+    app_dirs = appdirs.AppDirs(APP_NAME, APP_AUTHOR)
     config_dir = Path(app_dirs.user_config_dir)
     if sys.platform == 'darwin':
         config_dir = Path('~/.config/osprey')
