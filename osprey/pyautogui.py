@@ -1,3 +1,5 @@
+from sys import platform
+
 import pyautogui
 
 from . import keys
@@ -11,6 +13,8 @@ def pyautogui_press(key_string):
         keys.insert(-1, 'Shift')
         keys[-1].lower()
     keys = {key: KEY_MAP[key] for key in keys}
+    if platform == 'darwin':
+        keys.replace('ctrl', 'command')
     for key in keys:
         pyautogui.keyDown(key)
     for key in keys[::-1]:  # `[::-1]` reverses list

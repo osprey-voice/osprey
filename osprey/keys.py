@@ -9,7 +9,6 @@ NUMBERS = list(string.digits)
 PUNCTUATION = list(string.punctuation)
 
 MODIFIERS = [
-    'Cmd',
     'Ctrl',
     'Alt',
     'Shift',
