@@ -62,6 +62,8 @@ def signal_handler(sig, frame):
 def main():
     app_dirs = appdirs.AppDirs(APP_NAME)
     config_dir = Path(app_dirs.user_config_dir)
+    if sys.platform == 'darwin':
+        config_dir = Path('~/.config/osprey')
     log_file = config_dir.joinpath(LOG_FILE_NAME)
     history_file = config_dir.joinpath(HISTORY_FILE_NAME)
 
