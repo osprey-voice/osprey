@@ -53,6 +53,34 @@ There are instructions for how to do this in that project's README.
 
 Install PortAudio using your distro's package manager.
 
+#### macOS
+
+```bash
+homebrew install portaudio
+```
+
+#### Windows
+
+TODO
+
+### GTK3
+
+#### Linux
+
+GTK3 is probably already installed, but if not, you can install it using your distro's package manager.
+
+#### macOS
+
+```bash
+homebrew install gtk+3
+```
+
+#### Windows
+
+https://www.gtk.org/docs/installations/windows/#using-gtk-from-msys2-packages
+
+https://github.com/GtkSharp/GtkSharp/wiki/Installing-Gtk-on-Windows
+
 ### Kaldi
 
 Download and extract one of the Kaldi models from [here](https://github.com/daanzu/kaldi-active-grammar/releases) to the Osprey config directory.
