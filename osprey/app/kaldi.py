@@ -9,12 +9,12 @@ def get_singleton():
 
 
 class Kaldi:
-    def __init__(self, config_dir, config):
+    def __init__(self, config_dir_path, config):
         self.engine = get_engine(
             'kaldi',
 
-            model_dir=config_dir.joinpath('kaldi_model'),
-            tmp_dir=config_dir.joinpath('kaldi_tmp'),
+            model_dir=config_dir_path.joinpath('kaldi_model'),
+            tmp_dir=config_dir_path.joinpath('kaldi_tmp'),
 
             input_device_index=None,
 

@@ -1,15 +1,11 @@
 from gi.repository import Gtk as gtk, AppIndicator3 as appindicator
 
-from ..open import open
+from ..open import open_config_dir, open_log_file, open_history_file
 from ..control import quit_program
 
 
 class Indicator():
-    def __init__(self, app_name, config_dir, log_file, history_file):
-        self._config_dir = config_dir
-        self._log_file = log_file
-        self._history_file = history_file
-
+    def __init__(self, app_name):
         icon_path = gtk.STOCK_INFO
         self._indicator = appindicator.Indicator.new(
             app_name,
@@ -72,13 +68,13 @@ class Indicator():
         return menu
 
     def _open_config_dir(self, source):
-        open(self._config_dir)
+        open_config_dir()
 
     def _open_log_file(self, source):
-        open(self._log_file)
+        open_log_file()
 
     def _open_history_file(self, source):
-        open(self._history_file)
+        open_history_file()
 
     def _quit(self, source):
         quit_program()

@@ -20,6 +20,7 @@ from .voice import context_groups, IS_WAYLAND_RUNNING
 from .evdev import _open_uinput, _close_uinput
 from .control import quit_program, disable
 from .config import get_config
+from .open import _set_config_dir_path, _set_history_file_path, _set_log_file_path
 
 APP_NAME = 'osprey'
 APP_NAME_CAPITALIZED = APP_NAME.capitalize()
@@ -68,18 +69,22 @@ def redirect_stdout_and_stderr(file):
 
 def main():
     app_dirs = appdirs.AppDirs(APP_NAME, APP_AUTHOR)
-    config_dir = Path(app_dirs.user_config_dir)
+    config_dir_path = Path(app_dirs.user_config_dir)
     if sys.platform == 'darwin':
-        config_dir = Path('~/.config/osprey').expanduser()
-    log_file_path = config_dir.joinpath(LOG_FILE_NAME)
-    history_file_path = config_dir.joinpath(HISTORY_FILE_NAME)
+        config_dir_path = Path('~/.config/osprey').expanduser()
+    log_file_path = config_dir_path.joinpath(LOG_FILE_NAME)
+    history_file_path = config_dir_path.joinpath(HISTORY_FILE_NAME)
 
     log_file = log_file_path.open('w')
     logging.basicConfig(level=logging.INFO, stream=log_file)
     redirect_stdout_and_stderr(log_file)
 
-    sys.path.append(str(config_dir))
-    read_scripts(config_dir)
+    _set_log_file_path(log_file_path)
+    _set_history_file_path(history_file_path)
+    _set_config_dir_path(config_dir_path)
+
+    sys.path.append(str(config_dir_path))
+    read_scripts(config_dir_path)
     config = get_config()
 
     global enable_notifications
@@ -89,8 +94,8 @@ def main():
         disable()
 
     Notify.init(APP_NAME)
-    Indicator(APP_NAME, config_dir, log_file_path, history_file_path)
-    kaldi = Kaldi(config_dir, config['kaldi'])
+    Indicator(APP_NAME)
+    kaldi = Kaldi(config_dir_path, config['kaldi'])
     kaldi.engine.connect()
     if IS_WAYLAND_RUNNING:
         _open_uinput()
