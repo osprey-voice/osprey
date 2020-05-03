@@ -7,6 +7,7 @@ import sys
 import threading
 import importlib
 import signal
+import logging
 
 import appdirs
 import dragonfly
@@ -37,7 +38,7 @@ def read_scripts(config_dir):
             try:
                 importlib.import_module('.'.join(parts))
             except Exception as e:
-                print(f'Error occurred while loading \'{path}\': {e}', file=sys.stderr)
+                logging.exception(f'Error occurred while loading \'{path}\': {e}')
 
 
 def compile_regexes(grammar):
@@ -60,13 +61,22 @@ def signal_handler(sig, frame):
     quit_program()
 
 
+def redirect_stdout_and_stderr(file):
+    sys.stdout = file
+    sys.stderr = file
+
+
 def main():
     app_dirs = appdirs.AppDirs(APP_NAME, APP_AUTHOR)
     config_dir = Path(app_dirs.user_config_dir)
     if sys.platform == 'darwin':
         config_dir = Path('~/.config/osprey').expanduser()
-    log_file = config_dir.joinpath(LOG_FILE_NAME)
-    history_file = config_dir.joinpath(HISTORY_FILE_NAME)
+    log_file_path = config_dir.joinpath(LOG_FILE_NAME)
+    history_file_path = config_dir.joinpath(HISTORY_FILE_NAME)
+
+    log_file = log_file_path.open('w')
+    logging.basicConfig(level=logging.INFO, stream=log_file)
+    redirect_stdout_and_stderr(log_file)
 
     sys.path.append(str(config_dir))
     read_scripts(config_dir)
@@ -79,7 +89,7 @@ def main():
         disable()
 
     Notify.init(APP_NAME)
-    Indicator(APP_NAME, config_dir, log_file, history_file)
+    Indicator(APP_NAME, config_dir, log_file_path, history_file_path)
     kaldi = Kaldi(config_dir, config['kaldi'])
     kaldi.engine.connect()
     if IS_WAYLAND_RUNNING:
@@ -101,6 +111,7 @@ def main():
     if IS_WAYLAND_RUNNING:
         _close_uinput()
     gtk.main_quit()
+    log_file.close()
 
 
 if __name__ == '__main__':
