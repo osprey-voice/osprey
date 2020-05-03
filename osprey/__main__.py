@@ -47,14 +47,14 @@ def compile_regexes(grammar):
             context._compile(grammar)
 
 
-def show_notification(result):
-    Notify.Notification.new(APP_NAME_CAPITALIZED, result).show()
+def show_notification(transcript):
+    Notify.Notification.new(APP_NAME_CAPITALIZED, transcript).show()
 
 
 def on_recognition(words, rule, node):
-    result = ' '.join(words)
+    transcript = ' '.join(words)
     if enable_notifications:
-        show_notification(result)
+        show_notification(transcript)
 
 
 def signal_handler(sig, frame):
