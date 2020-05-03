@@ -4,12 +4,17 @@ import os
 
 from dragonfly import CompoundRule, Dictation, Choice, Integer, Repetition, Optional
 
-from .evdev import evdev_press, evdev_insert
-from .pyautogui import pyautogui_press, pyautogui_insert
-
 IS_WAYLAND_RUNNING = os.environ.get('XDG_SESSION_TYPE') == 'wayland'
-PRESS_FUNCTION = evdev_press if IS_WAYLAND_RUNNING else pyautogui_press
-INSERT_FUNCTION = evdev_insert if IS_WAYLAND_RUNNING else pyautogui_insert
+
+if IS_WAYLAND_RUNNING:
+    from .evdev import evdev_press, evdev_insert
+    PRESS_FUNCTION = evdev_press
+    INSERT_FUNCTION = evdev_insert
+else:
+    from .pyautogui import pyautogui_press, pyautogui_insert
+    PRESS_FUNCTION = pyautogui_press
+    INSERT_FUNCTION = pyautogui_insert
+
 
 last_command: OptionalType[Callable[[], None]] = None
 
