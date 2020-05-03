@@ -4,8 +4,8 @@ import subprocess
 
 def open(path):
     if sys.platform == 'darwin':
-        subprocess.call(['open', path])
+        subprocess.Popen(['open', path])
     elif sys.platform == 'win32':
-        subprocess.call(['start', '', path])
+        subprocess.Popen(['start', '', path])
     else:
-        subprocess.call(['xdg-open', path])
+        subprocess.Popen(['xdg-open', path])
