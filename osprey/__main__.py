@@ -62,11 +62,6 @@ def signal_handler(sig, frame):
     quit_program()
 
 
-def redirect_stdout_and_stderr(file):
-    sys.stdout = file
-    sys.stderr = file
-
-
 def main():
     app_dirs = appdirs.AppDirs(APP_NAME, APP_AUTHOR)
     config_dir_path = Path(app_dirs.user_config_dir)
@@ -75,9 +70,14 @@ def main():
     log_file_path = config_dir_path.joinpath(LOG_FILE_NAME)
     history_file_path = config_dir_path.joinpath(HISTORY_FILE_NAME)
 
-    log_file = log_file_path.open('w')
-    logging.basicConfig(level=logging.INFO, stream=log_file)
-    redirect_stdout_and_stderr(log_file)
+    logging.basicConfig(
+        level=logging.INFO,
+        format='[%(asctime)s] [%(threadName)s] [%(name)s] [%(levelname)s] %(message)s',
+        handlers=[
+            logging.FileHandler(log_file_path, mode='w'),
+            logging.StreamHandler()
+        ]
+    )
 
     _set_log_file_path(log_file_path)
     _set_history_file_path(history_file_path)
@@ -116,7 +116,6 @@ def main():
     if IS_WAYLAND_RUNNING:
         _close_uinput()
     gtk.main_quit()
-    log_file.close()
 
 
 if __name__ == '__main__':
