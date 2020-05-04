@@ -40,6 +40,8 @@ def read_scripts(config_dir):
                 importlib.import_module('.'.join(parts))
             except Exception as e:
                 logging.exception(f'Error occurred while loading \'{path}\': {e}')
+            else:
+                logging.info(f'Loaded \'{path}\'')
 
 
 def compile_regexes(grammar):
