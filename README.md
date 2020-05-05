@@ -2,9 +2,15 @@
 
 [![Matrix](https://img.shields.io/badge/matrix-%23osprey-blue.svg)](https://matrix.to/#/#osprey:matrix.org)
 
-Osprey is a cross-platform voice typing program that allows you to use your computer and type with your voice. It can be used for coding, web browsing, dictating, and more in an efficient and reliable way. It is built on top of [Dragonfly](https://github.com/dictation-toolbox/dragonfly) and [Kaldi Active Grammar](https://github.com/daanzu/kaldi-active-grammar) which uses [Kaldi](https://github.com/kaldi-asr/kaldi) for speech recognition but other engines are welcome to be incorporated.
+Osprey is a cross-platform voice typing program that allows you to use your computer and type with your voice.
+It can be used for coding, web browsing, dictating, and more in an efficient and reliable way.
+It is built on top of [Dragonfly](https://github.com/dictation-toolbox/dragonfly) and [Kaldi Active Grammar](https://github.com/daanzu/kaldi-active-grammar) which uses [Kaldi](https://github.com/kaldi-asr/kaldi) for speech recognition but other engines are welcome to be incorporated.
 
-Osprey works by first transcribing microphone audio to text using a speech recognition engine, then it matches the transcription to user specified commands and keyboard input. It is highly configurable with Python, and uses Python scripts to specify the commands using the Osprey APIs. No commands are included by default, but an official starter pack of Osprey scripts exists at [osprey-starter-pack](https://github.com/osprey-voice/osprey-starter-pack).
+Osprey works by providing a Python API that allows users to specify voice commands, from which Osprey builds a fixed grammar that specifies the possible commands a user can say.
+This grammar is then fed to a speech recognition engine, which then begins to transcribe microphone audio against this grammar.
+If a voice transcription matches one of these commands, the callback associated with the voice command is then executed.
+Osprey provide some built in functions for simulating key presses that can be used in command callbacks, but any function can be executed too.
+No commands are included by default, but an official starter pack of Osprey scripts exists at [osprey-starter-pack](https://github.com/osprey-voice/osprey-starter-pack).
 
 Official resources:
 
@@ -24,8 +30,10 @@ Other great resources for help getting started:
 - GTK3
 - PortAudio
 - A (decent) microphone
-- A compatible Kaldi language model
-- About 1GB of memory for the Kaldi model
+- A compatible Kaldi language model that supports your language
+- About 1GB of memory for the Kaldi model during runtime
+- (optional) pipx for installation
+- (preferable) some programming and python experience
 
 ## Installation
 
