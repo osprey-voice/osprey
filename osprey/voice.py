@@ -133,7 +133,7 @@ class Context:
                 action(m)
 
             rule = type(
-                f'{self._name}: {rule}',
+                f'{self._name}: \'{rule}\'',
                 (CompoundRule,),
                 {
                     'spec': corrected_rule,

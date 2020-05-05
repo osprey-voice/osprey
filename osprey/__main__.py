@@ -58,6 +58,8 @@ def on_recognition(words, rule, node):
     transcript = ' '.join(words)
     if enable_notifications:
         show_notification(transcript)
+    history_logger = logging.getLogger('history')
+    history_logger.info(f'{rule.name}: \'{transcript}\'')
 
 
 def signal_handler(sig, frame):
@@ -80,6 +82,12 @@ def main():
             logging.StreamHandler()
         ]
     )
+
+    history_logger = logging.getLogger('history')
+    history_logger.setLevel(logging.INFO)
+    history_handler = logging.FileHandler(history_file_path, mode='w')
+    history_handler.setFormatter(logging.Formatter('[%(asctime)s] %(message)s'))
+    history_logger.addHandler(history_handler)
 
     _set_log_file_path(log_file_path)
     _set_history_file_path(history_file_path)
