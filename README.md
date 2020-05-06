@@ -29,6 +29,7 @@ Other great resources for help getting started:
 - Python 3.5+
 - GTK3
 - PortAudio
+- git
 - A (decent) microphone
 - A compatible Kaldi language model that supports your language
 - About 1GB of memory for the Kaldi model during runtime
