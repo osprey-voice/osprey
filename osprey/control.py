@@ -1,6 +1,9 @@
-from .app.kaldi import get_singleton
+from . import voice
+from .app import kaldi
+from .voice import ContextGroup
 
 enabled = True
+should_reload_scripts = False
 
 
 def enable():
@@ -24,4 +27,14 @@ def is_enabled():
 
 
 def quit_program():
-    get_singleton().engine.disconnect()
+    kaldi.singleton.engine.disconnect()
+
+
+def reload_scripts():
+    global should_reload_scripts
+    should_reload_scripts = True
+
+    voice.context_groups = {}
+    voice.default_context_group = ContextGroup('default')
+
+    kaldi.singleton.engine.disconnect()

@@ -14,8 +14,3 @@ config = {
 def set_config(custom):
     global config
     config.update(custom)
-
-
-def get_config():
-    global config
-    return config

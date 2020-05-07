@@ -3,11 +3,6 @@ from dragonfly import get_engine
 singleton = None
 
 
-def get_singleton():
-    global singleton
-    return singleton
-
-
 class Kaldi:
     def __init__(self, config_dir_path, config):
         self.engine = get_engine(

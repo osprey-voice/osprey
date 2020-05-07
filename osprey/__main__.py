@@ -2,40 +2,39 @@
 
 from .app import gi_require_version as _
 
-from pathlib import Path
+import importlib
+import logging
+import signal
 import sys
 import threading
-import importlib
-import signal
-import logging
+from pathlib import Path
 
 import appdirs
 import dragonfly
 from dragonfly import Grammar
 from gi.repository import Gtk as gtk, Notify
 
+from . import open, control, config
+from .control import quit_program, disable
+from .evdev import _open_uinput, _close_uinput
+from .voice import context_groups, IS_WAYLAND_RUNNING
 from .app.indicator import Indicator
 from .app.kaldi import Kaldi
-from .voice import context_groups, IS_WAYLAND_RUNNING
-from .evdev import _open_uinput, _close_uinput
-from .control import quit_program, disable
-from .config import get_config
-from .open import _set_config_dir_path, _set_history_file_path, _set_log_file_path
 
+APP_AUTHOR = 'osprey-voice'
 APP_NAME = 'osprey'
 APP_NAME_CAPITALIZED = APP_NAME.capitalize()
-APP_AUTHOR = 'osprey-voice'
 
-LOG_FILE_NAME = 'logs.txt'
 HISTORY_FILE_NAME = 'history'
+LOG_FILE_NAME = 'logs.txt'
 
 enable_notifications = True
 
 
-def read_scripts(config_dir):
-    for path in config_dir.glob('**/*.py'):
+def load_scripts(config_dir_path):
+    for path in config_dir_path.glob('**/*.py'):
         if path.is_file() and path.stem != '':
-            parts = list(path.parts[len(config_dir.parts):-1]) + [path.stem]
+            parts = list(path.parts[len(config_dir_path.parts):-1]) + [path.stem]
             try:
                 importlib.import_module('.'.join(parts))
             except Exception as e:
@@ -50,8 +49,8 @@ def compile_regexes(grammar):
             context._compile(grammar)
 
 
-def show_notification(transcript):
-    Notify.Notification.new(APP_NAME_CAPITALIZED, transcript).show()
+def show_notification(message):
+    Notify.Notification.new(APP_NAME_CAPITALIZED, message).show()
 
 
 def on_recognition(words, rule, node):
@@ -64,6 +63,13 @@ def on_recognition(words, rule, node):
 
 def signal_handler(sig, frame):
     quit_program()
+
+
+def reload_scripts(config_dir_path):
+    load_scripts(config_dir_path)
+    grammar = Grammar('default')
+    compile_regexes(grammar)
+    grammar.load()
 
 
 def main():
@@ -89,23 +95,23 @@ def main():
     history_handler.setFormatter(logging.Formatter('[%(asctime)s] %(message)s'))
     history_logger.addHandler(history_handler)
 
-    _set_log_file_path(log_file_path)
-    _set_history_file_path(history_file_path)
-    _set_config_dir_path(config_dir_path)
+    open.config_dir_path = config_dir_path
+    open.history_file_path = history_file_path
+    open.log_file_path = log_file_path
 
     sys.path.append(str(config_dir_path))
-    read_scripts(config_dir_path)
-    config = get_config()
+    load_scripts(config_dir_path)
+    _config = config.config
 
     global enable_notifications
-    enable_notifications = config['enable_notifications']
+    enable_notifications = _config['enable_notifications']
 
-    if not config['enable_by_default']:
+    if not _config['enable_by_default']:
         disable()
 
     Notify.init(APP_NAME)
     Indicator(APP_NAME)
-    kaldi = Kaldi(config_dir_path, config['kaldi'])
+    kaldi = Kaldi(config_dir_path, _config['kaldi'])
     kaldi.engine.connect()
     if IS_WAYLAND_RUNNING:
         _open_uinput()
@@ -122,6 +128,12 @@ def main():
     signal.signal(signal.SIGINT, signal_handler)
 
     kaldi.engine.do_recognition()
+    while control.should_reload_scripts:
+        control.should_reload_scripts = False
+        kaldi = Kaldi(config_dir_path, _config['kaldi'])
+        kaldi.engine.connect()
+        reload_scripts(config_dir_path)
+        kaldi.engine.do_recognition()
 
     if IS_WAYLAND_RUNNING:
         _close_uinput()
