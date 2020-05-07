@@ -1,8 +1,8 @@
 import string
 import time
 
-from evdev.ecodes import ecodes
 import evdev
+from evdev.ecodes import ecodes
 
 from .keys import KEYS
 

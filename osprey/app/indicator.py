@@ -1,7 +1,7 @@
 from gi.repository import Gtk as gtk, AppIndicator3 as appindicator
 
-from ..open import open_config_dir, open_log_file, open_history_file
 from ..control import quit_program
+from ..open import open_config_dir, open_log_file, open_history_file
 
 
 class Indicator():

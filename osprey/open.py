@@ -1,5 +1,5 @@
-import sys
 import subprocess
+import sys
 
 config_dir_path = None
 history_file_path = None

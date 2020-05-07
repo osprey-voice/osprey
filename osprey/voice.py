@@ -1,6 +1,6 @@
-from typing import Set, Optional as OptionalType, Callable
-import time
 import os
+import time
+from typing import Optional as OptionalType, Callable
 
 from dragonfly import CompoundRule, Dictation, Choice, Integer, Repetition, Optional
 
