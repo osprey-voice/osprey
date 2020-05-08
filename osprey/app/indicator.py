@@ -1,7 +1,7 @@
-from gi.repository import Gtk as gtk, AppIndicator3 as appindicator
+from gi.repository import AppIndicator3 as appindicator, Gtk as gtk
 
 from ..control import quit_program
-from ..open import open_config_dir, open_log_file, open_history_file
+from ..open import open_config_dir, open_history_file, open_log_file
 
 
 class Indicator():
@@ -49,12 +49,12 @@ class Indicator():
         item.connect('activate', self._open_config_dir)
         menu.append(item)
 
-        item = gtk.MenuItem('Open Log File')
-        item.connect('activate', self._open_log_file)
-        menu.append(item)
-
         item = gtk.MenuItem('Open History File')
         item.connect('activate', self._open_history_file)
+        menu.append(item)
+
+        item = gtk.MenuItem('Open Log File')
+        item.connect('activate', self._open_log_file)
         menu.append(item)
 
         separator = gtk.SeparatorMenuItem()
@@ -70,11 +70,11 @@ class Indicator():
     def _open_config_dir(self, source):
         open_config_dir()
 
-    def _open_log_file(self, source):
-        open_log_file()
-
     def _open_history_file(self, source):
         open_history_file()
+
+    def _open_log_file(self, source):
+        open_log_file()
 
     def _quit(self, source):
         quit_program()

@@ -1,8 +1,8 @@
 import os
 import time
-from typing import Optional as OptionalType, Callable
+from typing import Callable, Optional as OptionalType
 
-from dragonfly import CompoundRule, Dictation, Choice, Integer, Repetition, Optional
+from dragonfly import Choice, CompoundRule, Dictation, Integer, Optional, Repetition
 
 IS_WAYLAND_RUNNING = os.environ.get('XDG_SESSION_TYPE') == 'wayland'
 

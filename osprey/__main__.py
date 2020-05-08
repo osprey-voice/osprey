@@ -14,9 +14,9 @@ import dragonfly
 from dragonfly import Grammar
 from gi.repository import Gtk as gtk, Notify
 
-from . import open, control, config
-from .control import quit_program, disable
-from .evdev import _open_uinput, _close_uinput
+from . import config, control, open
+from .control import disable, quit_program
+from .evdev import _close_uinput, _open_uinput
 from .voice import context_groups, IS_WAYLAND_RUNNING
 from .app.indicator import Indicator
 from .app.kaldi import Kaldi
