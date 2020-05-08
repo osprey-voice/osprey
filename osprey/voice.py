@@ -105,6 +105,8 @@ class Context:
             extras = {}
             if '<phrase>' in rule:
                 extras['phrase'] = Dictation('phrase')
+            if '<word>' in rule:
+                extras['word'] = Dictation('word')
             if '<n>' in rule:
                 extras['n'] = Integer('n', 0, 101)
             for name, choice in self._choices.items():
@@ -126,7 +128,7 @@ class Context:
                     if key in identifiers:
                         if val is None:
                             m[key] = []
-                        elif key == 'phrase':
+                        elif key in {'phrase', 'word'}:
                             m[key] = val.format()
                         else:
                             m[key] = val
