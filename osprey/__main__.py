@@ -32,7 +32,7 @@ enable_notifications = True
 
 
 def load_scripts(config_dir_path):
-    for path in config_dir_path.glob('**/*.py'):
+    for path in sorted(config_dir_path.glob('**/*.py')):
         if path.is_file() and path.stem != '':
             parts = list(path.parts[len(config_dir_path.parts):-1]) + [path.stem]
             try:
