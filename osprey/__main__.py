@@ -80,11 +80,17 @@ def main():
     thread.start()
 
     app_dirs = appdirs.AppDirs(APP_NAME, APP_AUTHOR)
-    config_dir_path = Path(app_dirs.user_config_dir)
     if sys.platform == 'darwin':
         config_dir_path = Path('~/.config/osprey').expanduser()
-    log_file_path = config_dir_path.joinpath(LOG_FILE_NAME)
-    history_file_path = config_dir_path.joinpath(HISTORY_FILE_NAME)
+    else:
+        config_dir_path = Path(app_dirs.user_config_dir)
+    if sys.platform == 'win32':
+        log_dir_path = Path(app_dirs.user_log_dir)
+    else:
+        log_dir_path = Path('~/.local/state/osprey').expanduser()
+    log_dir_path.mkdir(parents=True, exist_ok=True)
+    log_file_path = log_dir_path.joinpath(LOG_FILE_NAME)
+    history_file_path = log_dir_path.joinpath(HISTORY_FILE_NAME)
 
     logging.basicConfig(
         level=logging.INFO,
