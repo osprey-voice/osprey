@@ -73,6 +73,12 @@ def reload_scripts(config_dir_path):
 
 
 def main():
+    Notify.init(APP_NAME)
+    Indicator(APP_NAME)
+
+    thread = threading.Thread(target=lambda: gtk.main(), daemon=True)
+    thread.start()
+
     app_dirs = appdirs.AppDirs(APP_NAME, APP_AUTHOR)
     config_dir_path = Path(app_dirs.user_config_dir)
     if sys.platform == 'darwin':
@@ -109,8 +115,6 @@ def main():
     if not _config['enable_by_default']:
         disable()
 
-    Notify.init(APP_NAME)
-    Indicator(APP_NAME)
     kaldi = Kaldi(config_dir_path, _config['kaldi'])
     kaldi.engine.connect()
     if IS_WAYLAND_RUNNING:
@@ -120,10 +124,6 @@ def main():
     grammar = Grammar('default')
     compile_regexes(grammar)
     grammar.load()
-
-    thread = threading.Thread(target=lambda: gtk.main())
-    thread.daemon = True
-    thread.start()
 
     signal.signal(signal.SIGINT, signal_handler)
 
