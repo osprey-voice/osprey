@@ -102,44 +102,49 @@ class Context:
 
     def _compile(self, grammar):
         for rule, action in self._commands.items():
-            extras = {}
+            placeholders = {}
             if '<phrase>' in rule:
-                extras['phrase'] = Dictation('phrase')
+                placeholders['phrase'] = Dictation('phrase')
             if '<word>' in rule:
-                extras['word'] = Dictation('word')
+                placeholders['word'] = Dictation('word')
             if '<n>' in rule:
-                extras['n'] = Integer('n', 0, 101)
+                placeholders['n'] = Integer('n', 0, 101)
             for name, choice in self._choices.items():
                 if f'<{name}>*' in rule:
-                    extras[name] = Optional(Repetition(
+                    placeholders[name] = Optional(Repetition(
                         Choice('', {x: x for x in choice}), max=5), name=name)
                 elif f'<{name}>+' in rule:
-                    extras[name] = Repetition(Choice('', {x: x for x in choice}), max=5, name=name)
+                    placeholders[name] = Repetition(
+                        Choice('', {x: x for x in choice}), max=5, name=name)
                 elif f'<{name}>' in rule:
-                    extras[name] = Choice(name, {x: x for x in choice})
+                    placeholders[name] = Choice(name, {x: x for x in choice})
 
-            corrected_rule = rule.replace('*', '').replace('+', '')
+            normalized_rule = rule.replace('*', '').replace('+', '')
 
             # default parameters used to fix late binding
             # https://stackoverflow.com/questions/3431676/creating-functions-in-a-loop
-            def _process_recognition(self, _node, extras, identifiers=extras.keys(), action=action):
+            def _process_recognition(self, node, extras, placeholder_keys=placeholders.keys(),
+                                     action=action):
                 m = {}
-                for key, val in extras.items():
-                    if key in identifiers:
+                for key in placeholder_keys:
+                    if key in extras:
+                        val = extras[key]
                         if val is None:
                             m[key] = []
                         elif key in {'phrase', 'word'}:
                             m[key] = val.format()
                         else:
                             m[key] = val
+                    else:
+                        m[key] = None
                 action(m)
 
             rule = type(
                 f'{self._name}: \'{rule}\'',
                 (CompoundRule,),
                 {
-                    'spec': corrected_rule,
-                    'extras': list(extras.values()),
+                    'spec': normalized_rule,
+                    'extras': list(placeholders.values()),
                     '_process_recognition': _process_recognition,
                 },
             )()
