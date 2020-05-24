@@ -29,7 +29,7 @@ Other great resources for help getting started:
 - Python 3.5+
 - GTK3
 - PortAudio
-- git
+- Git
 - A (decent) microphone
 - A compatible Kaldi language model that supports your language
 - About 1GB of memory for the Kaldi model during runtime
@@ -60,12 +60,14 @@ There are instructions for how to do this in that project's README.
 
 #### Linux
 
-Install PortAudio and GTK3 using your distro's package manager (GTK3 is probably already installed).
+Install PortAudio, GTK3, Python3, and Git using your distro's package manager.
 
 #### macOS
 
+Install the dependencies using [Homebrew](https://brew.sh/) with:
+
 ```bash
-homebrew install portaudio gtk+3
+homebrew install portaudio gtk+3 python git
 ```
 
 #### Windows
