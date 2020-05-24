@@ -125,7 +125,9 @@ class Context:
             # https://stackoverflow.com/questions/3431676/creating-functions-in-a-loop
             def _process_recognition(self, node, extras, placeholder_keys=placeholders.keys(),
                                      action=action):
-                m = {}
+                m = {
+                    'transcript': ' '.join(node.words()),
+                }
                 for key in placeholder_keys:
                     if key in extras:
                         val = extras[key]
