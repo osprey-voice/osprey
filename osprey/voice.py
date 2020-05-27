@@ -23,7 +23,7 @@ def press(key_string):
     PRESS_FUNCTION(key_string)
 
     global last_command
-    last_command = lambda: press(key_string)  # noqa
+    last_command = lambda: press(key_string)
 
 
 previously_inserted_string: OptionalType[str] = None
@@ -33,7 +33,7 @@ def insert(custom_string):
     INSERT_FUNCTION(custom_string)
 
     global last_command
-    last_command = lambda: insert(custom_string)  # noqa
+    last_command = lambda: insert(custom_string)
 
     global previously_inserted_string
     previously_inserted_string = custom_string
