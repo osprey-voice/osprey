@@ -133,12 +133,16 @@ def main():
 
     signal.signal(signal.SIGINT, signal_handler)
 
+    kaldi.engine.prepare_for_recognition()
+    show_notification('Listening...')
     kaldi.engine.do_recognition()
     while control.should_reload_scripts:
         control.should_reload_scripts = False
         kaldi = Kaldi(config_dir_path, _config['kaldi'])
         kaldi.engine.connect()
         reload_scripts(config_dir_path)
+        kaldi.engine.prepare_for_recognition()
+        show_notification('Listening...')
         kaldi.engine.do_recognition()
 
     if IS_WAYLAND_RUNNING:
