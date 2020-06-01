@@ -108,7 +108,7 @@ class Context:
             if '<word>' in rule:
                 placeholders['word'] = Dictation('word')
             if '<n>' in rule:
-                placeholders['n'] = Integer('n', 0, 101)
+                placeholders['n'] = Integer('n', 0, 1_000_000_000)
             for name, choice in self._choices.items():
                 if f'<{name}>*' in rule:
                     placeholders[name] = Optional(Repetition(
