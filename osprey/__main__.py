@@ -10,6 +10,7 @@ import threading
 from pathlib import Path
 
 import appdirs
+import click
 import dragonfly
 from dragonfly import Grammar
 from gi.repository import Gtk as gtk, Notify
@@ -20,6 +21,8 @@ from .evdev import _close_uinput, _open_uinput
 from .voice import context_groups, IS_WAYLAND_RUNNING
 from .app.indicator import Indicator
 from .app.kaldi import Kaldi
+
+VERSION = '0.1.0'
 
 APP_AUTHOR = 'osprey-voice'
 APP_NAME = 'osprey'
@@ -72,6 +75,8 @@ def reload_scripts(config_dir_path):
     grammar.load()
 
 
+@click.command()
+@click.version_option(version=VERSION)
 def main():
     Notify.init(APP_NAME)
     Indicator(APP_NAME)
