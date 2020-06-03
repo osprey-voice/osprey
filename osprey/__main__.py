@@ -35,8 +35,10 @@ enable_notifications = True
 
 
 def load_scripts(config_dir_path):
+    trim_parts_count = len(config_dir_path.parts)
     for path in sorted(config_dir_path.glob('**/*.py')):
-        if path.is_file() and path.stem != '':
+        not_hidden_file = all([part[0] != '.' for part in path.parts[trim_parts_count:]])
+        if path.is_file() and not_hidden_file:
             parts = list(path.parts[len(config_dir_path.parts):-1]) + [path.stem]
             try:
                 importlib.import_module('.'.join(parts))
