@@ -1,3 +1,4 @@
+import logging
 import os
 import time
 from typing import Callable, Optional as OptionalType
@@ -141,14 +142,20 @@ class Context:
                         m[key] = None
                 action(m)
 
-            rule = type(
-                f'{self._name}: \'{rule}\'',
-                (CompoundRule,),
-                {
-                    'spec': normalized_rule,
-                    'extras': list(placeholders.values()),
-                    '_process_recognition': _process_recognition,
-                },
-            )()
+            name = f'{self._name}: \'{rule}\''
 
-            grammar.add_rule(rule)
+            try:
+                rule = type(
+                    name,
+                    (CompoundRule,),
+                    {
+                        'spec': normalized_rule,
+                        'extras': list(placeholders.values()),
+                        '_process_recognition': _process_recognition,
+                    },
+                )()
+            except Exception as e:
+                logging.exception(f'Error occurred while compiling rule \'{name}\': {e}')
+            else:
+                grammar.add_rule(rule)
+                logging.info(f'Compiled rule \'{name}\'')
