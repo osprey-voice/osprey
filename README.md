@@ -1,7 +1,5 @@
 # Osprey
 
-[![Matrix](https://img.shields.io/badge/matrix-%23osprey-blue.svg)](https://matrix.to/#/#osprey:matrix.org)
-
 Osprey is a cross-platform voice typing program that allows you to use your computer and type with your voice.
 It can be used for coding, web browsing, dictating, and more in an efficient and reliable way.
 It is built on top of [Dragonfly](https://github.com/dictation-toolbox/dragonfly) and [Kaldi Active Grammar](https://github.com/daanzu/kaldi-active-grammar) which uses [Kaldi](https://github.com/kaldi-asr/kaldi) for speech recognition but other engines are welcome to be incorporated.
