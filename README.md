@@ -1,8 +1,8 @@
 # Osprey
 
 Osprey is a cross-platform voice typing program that allows you to use your computer and type with your voice.
-It can be used for coding, web browsing, dictating, and more in an efficient and reliable way.
-It is built on top of [Dragonfly](https://github.com/dictation-toolbox/dragonfly) and [Kaldi Active Grammar](https://github.com/daanzu/kaldi-active-grammar) which uses [Kaldi](https://github.com/kaldi-asr/kaldi) for speech recognition but other engines are welcome to be incorporated.
+It can be used for coding, web browsing, dictating, or any other keyboard driven task.
+It is built on top of [Dragonfly](https://github.com/dictation-toolbox/dragonfly) and [Kaldi Active Grammar](https://github.com/daanzu/kaldi-active-grammar) which uses [Kaldi](https://github.com/kaldi-asr/kaldi) for speech recognition.
 
 Osprey works by providing a Python API that allows users to specify voice commands, from which Osprey builds a fixed grammar that specifies the possible commands a user can say.
 This grammar is then fed to a speech recognition engine, which then begins to transcribe microphone audio against this grammar.
