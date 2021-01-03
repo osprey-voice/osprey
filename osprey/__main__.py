@@ -99,9 +99,11 @@ def main():
     log_file_path = log_dir_path.joinpath(LOG_FILE_NAME)
     history_file_path = log_dir_path.joinpath(HISTORY_FILE_NAME)
 
+    # https://stackoverflow.com/questions/6290739/python-logging-use-milliseconds-in-time-format
     logging.basicConfig(
         level=logging.INFO,
-        format='[%(asctime)s] [%(threadName)s] [%(name)s] [%(levelname)s] %(message)s',
+        format='[%(asctime)s.%(msecs)03d] [%(threadName)s] [%(name)s] [%(levelname)s] %(message)s',
+        datefmt='%Y-%m-%d,%H:%M:%S',
         handlers=[
             logging.FileHandler(log_file_path, mode='w'),
             logging.StreamHandler()
